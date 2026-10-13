@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import "./MarketingSite.css";
 
-const appUrl = "https://recon-brief.vercel.app/";
+const appUrl = "https://app.reconbrief.in/";
 
 const capabilities = [
   { icon: <FileSearch size={19} />, number: "01", title: "AI-powered research", description: "Research companies and competitors using current sources." },
