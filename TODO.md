@@ -31,3 +31,6 @@
 - Preserve the output heading, three output cards, Research Layer four-column structure, typography, proportions, and responsive behavior.
 - Respect reduced-motion preferences and contain the animation on desktop and mobile without horizontal overflow.
 - Build, syntax-check, inspect desktop/mobile Preview captures, verify asset loading, and deliver the complete updated source ZIP with Windows instructions.
+
+
+- Prepare a complete, self-contained Vite 8 deployment package that preserves the finalized Recon Brief design, includes the JavaScript runtime and both research imagery assets under `public/assets/`, builds to `dist/` with `vite build`, and includes exact GitHub/Vercel deployment instructions. Keep the separate Recon Brief app untouched.

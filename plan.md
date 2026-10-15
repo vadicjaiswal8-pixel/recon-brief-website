@@ -53,3 +53,8 @@ The existing visual composition remains the source of truth. This refinement upd
 
 ## Focused app-animation correction
 The original app source was located in `/home/ubuntu/recon-redesign/index.html` and `/home/ubuntu/recon-redesign/style.css`. Its `.rb-hero-proof` component and `proof-float`/`scan` behavior are reused in the marketing website's existing output-center visual as `.app-hero-animation`. The surrounding output heading, three cards, section proportions, and responsive layout remain intact. The Research Layer was inspected and requires no content or structural change: its current paragraph and four descriptive columns contain no unsupported metrics or verification claims.
+
+
+## Vite/Vercel deployment hardening
+
+The approved HTML/CSS/JavaScript design remains the source of truth. Deployment hardening adds only a minimal Vite 8 manifest/configuration and makes the existing stylesheet/runtime references Vite-safe. Research imagery, favicon, sitemap, robots policy, and route manifest are committed under `public/` so Vite copies them into `dist/`. No marketing copy, layout, animation, color, or responsive behavior is redesigned, and the separate `app.reconbrief.in` application remains untouched.

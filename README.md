@@ -6,9 +6,9 @@ The update preserves the original hero composition, typography, spacing, animati
 
 ## Requirements
 
-- Node.js 18 or newer (used for the static build script)
-- Python 3.9+ or another static HTTP server for local preview
-- No npm install is required. There is no package manifest because the site has no runtime dependencies.
+- Node.js 24.x is recommended for the Vercel setup; Node.js 18 or newer also supports the legacy static build script.
+- npm for the Vite 8 production build.
+- Python 3.9+ or Vite Preview for local preview.
 
 ## Run locally on Windows
 
@@ -35,11 +35,14 @@ py -m http.server 3000
 
 ## Build
 
+For the Vercel-compatible production build:
+
 ```powershell
-node build.mjs
+npm install
+npm run build
 ```
 
-The production-ready static output is written to `dist/` and includes the HTML, CSS, JavaScript, images, favicon, route manifest, sitemap, and robots file.
+The production-ready Vite output is written to `dist/` and includes the generated HTML, hashed CSS and JavaScript bundles, images, favicon, route manifest, sitemap, and robots file. `node build.mjs` remains available as a dependency-free legacy static copy build for local/manual use.
 
 ## Main files
 
@@ -48,7 +51,9 @@ The production-ready static output is written to `dist/` and includes the HTML, 
 - `script.js` — navigation, scroll reveal, workflow animation, interactive illustrative demo, and accessible interactions.
 - `assets/` and `public/assets/` — research report and evidence-network imagery.
 - `favicon.svg` and `public/favicon.svg` — blue rounded-square Recon Brief mark with a white R.
-- `build.mjs` — dependency-free static build script.
+- `package.json`, `package-lock.json`, `vite.config.js`, and `vercel.json` — Vite 8/Vercel deployment configuration.
+- `VERCEL_DEPLOYMENT.md` — exact GitHub/Vercel placement, settings, and asset instructions.
+- `build.mjs` — dependency-free legacy static build script.
 - `manus-routes.json`, `sitemap.xml`, `robots.txt` — discovery and route metadata.
 - `app.config.ts` — project logo metadata.
 
@@ -91,3 +96,10 @@ The Research Layer section was inspected and intentionally left structurally unc
 ### Validation for this pass
 
 The production build, JavaScript syntax check, CSS diff check, asset loading checks, and structural assertions passed. Browser Preview captures were completed at 1440px desktop and 390px mobile widths. The styled page rendered correctly, the app-derived animation markup was present in the output area, the Research Layer retained four columns, and all three output cards remained present. No unavailable dependencies remain for this animation adaptation.
+
+
+## Vite 8 / Vercel deployment hardening
+
+This package now includes `package.json`, `package-lock.json`, `vite.config.js`, `vercel.json`, and `VERCEL_DEPLOYMENT.md` for the existing Vite/Vercel setup. Vercel can run `vite build` and publish `dist/`. The approved HTML/CSS/JS design is unchanged; only the stylesheet/runtime references were made Vite-safe and the interaction script is bundled as a module.
+
+The production build was tested with Node.js 22.13.0 and Vite 8.0.0. The generated `dist/` contains the hashed CSS and JavaScript bundles, both research images, favicon, route manifest, sitemap, and robots file. A Vite preview server returned HTTP 200 for the page and every generated asset. Chromium DevTools reported no JavaScript exceptions and no failed resource loads. The browser check also confirmed the animated report frame and scan line, mobile navigation, workflow-stage interaction, and sample-brief progression.
