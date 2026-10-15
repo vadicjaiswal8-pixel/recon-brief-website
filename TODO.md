@@ -34,3 +34,6 @@
 
 
 - Prepare a complete, self-contained Vite 8 deployment package that preserves the finalized Recon Brief design, includes the JavaScript runtime and both research imagery assets under `public/assets/`, builds to `dist/` with `vite build`, and includes exact GitHub/Vercel deployment instructions. Keep the separate Recon Brief app untouched.
+
+
+- Fix the deployed evidence-layer and report-preview visuals by bundling both source images through Vite, preserve the existing design and animation behavior, reproduce the failure case without `public/assets/`, and verify the repaired production build in Chromium with both images loaded and no runtime or resource errors.

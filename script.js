@@ -1,3 +1,9 @@
+import evidenceNetworkUrl from './assets/evidence-network.png';
+import reportPreviewUrl from './assets/report-preview.jpg';
+
+document.querySelector('[data-recon-asset="evidence-network"]')?.setAttribute('src',evidenceNetworkUrl);
+document.querySelector('[data-recon-asset="report-preview"]')?.setAttribute('src',reportPreviewUrl);
+
 const header=document.querySelector('[data-header]');
 const menuToggle=document.querySelector('.menu-toggle');
 const mobileNav=document.querySelector('.mobile-nav');

@@ -103,3 +103,10 @@ The production build, JavaScript syntax check, CSS diff check, asset loading che
 This package now includes `package.json`, `package-lock.json`, `vite.config.js`, `vercel.json`, and `VERCEL_DEPLOYMENT.md` for the existing Vite/Vercel setup. Vercel can run `vite build` and publish `dist/`. The approved HTML/CSS/JS design is unchanged; only the stylesheet/runtime references were made Vite-safe and the interaction script is bundled as a module.
 
 The production build was tested with Node.js 22.13.0 and Vite 8.0.0. The generated `dist/` contains the hashed CSS and JavaScript bundles, both research images, favicon, route manifest, sitemap, and robots file. A Vite preview server returned HTTP 200 for the page and every generated asset. Chromium DevTools reported no JavaScript exceptions and no failed resource loads. The browser check also confirmed the animated report frame and scan line, mobile navigation, workflow-stage interaction, and sample-brief progression.
+
+
+## October 2026 deployed-asset repair
+
+The evidence-network visual and animated report preview are now imported from `assets/` by `script.js` and referenced relatively from `index.html`/`styles.css`. Vite emits hashed copies into `dist/assets/`, so the deployed site no longer depends on `/assets/evidence-network.png` or `/assets/report-preview.jpg` being manually copied into a Vercel `public/` folder. The original image files remain in the package as source assets and fallback references.
+
+This was tested with a clean Vite build after removing `public/assets/`. Both hashed images were still emitted. Chromium then loaded both images at their expected intrinsic widths, reported no runtime exceptions or failed resource loads, and confirmed the report float and scan-line animations were active.

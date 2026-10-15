@@ -58,3 +58,8 @@ The original app source was located in `/home/ubuntu/recon-redesign/index.html` 
 ## Vite/Vercel deployment hardening
 
 The approved HTML/CSS/JavaScript design remains the source of truth. Deployment hardening adds only a minimal Vite 8 manifest/configuration and makes the existing stylesheet/runtime references Vite-safe. Research imagery, favicon, sitemap, robots policy, and route manifest are committed under `public/` so Vite copies them into `dist/`. No marketing copy, layout, animation, color, or responsive behavior is redesigned, and the separate `app.reconbrief.in` application remains untouched.
+
+
+## Deployed visual asset repair
+
+The evidence-network and report-preview images are imported from the source `assets/` directory through the Vite entry module. The HTML keeps relative fallback sources and the ambient CSS background uses a relative source path. This makes Vite emit hashed image assets in `dist/assets/` and removes the deployment dependency on manually copied `public/assets/`. Visual design, animation behavior, copy, and layout remain unchanged.
