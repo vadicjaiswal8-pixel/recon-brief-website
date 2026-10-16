@@ -37,3 +37,5 @@
 
 
 - Fix the deployed evidence-layer and report-preview visuals by bundling both source images through Vite, preserve the existing design and animation behavior, reproduce the failure case without `public/assets/`, and verify the repaired production build in Chromium with both images loaded and no runtime or resource errors.
+
+- Optimize the finalized marketing website for phones and iPads without redesigning it: eliminate horizontal page movement, contain decorative transforms, provide a compact tablet navigation, keep the mobile demo stages within the viewport, preserve the desktop composition, and verify the result at 320px, 375px, 390px, 768px, 1024px, and 1366px widths.

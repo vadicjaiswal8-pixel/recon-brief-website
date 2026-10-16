@@ -63,3 +63,7 @@ The approved HTML/CSS/JavaScript design remains the source of truth. Deployment 
 ## Deployed visual asset repair
 
 The evidence-network and report-preview images are imported from the source `assets/` directory through the Vite entry module. The HTML keeps relative fallback sources and the ambient CSS background uses a relative source path. This makes Vite emit hashed image assets in `dist/assets/` and removes the deployment dependency on manually copied `public/assets/`. Visual design, animation behavior, copy, and layout remain unchanged.
+
+## Responsive optimization pass
+
+Responsive behavior is preserved as a visual refinement rather than a redesign. The implementation contains transformed decorative geometry, introduces a compact header through the tablet breakpoint, wraps the mobile demo stages, and clips horizontal overflow at the document boundary. The approved desktop visual system, content order, animation language, and typography remain unchanged.

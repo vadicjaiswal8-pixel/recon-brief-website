@@ -110,3 +110,13 @@ The production build was tested with Node.js 22.13.0 and Vite 8.0.0. The generat
 The evidence-network visual and animated report preview are now imported from `assets/` by `script.js` and referenced relatively from `index.html`/`styles.css`. Vite emits hashed copies into `dist/assets/`, so the deployed site no longer depends on `/assets/evidence-network.png` or `/assets/report-preview.jpg` being manually copied into a Vercel `public/` folder. The original image files remain in the package as source assets and fallback references.
 
 This was tested with a clean Vite build after removing `public/assets/`. Both hashed images were still emitted. Chromium then loaded both images at their expected intrinsic widths, reported no runtime exceptions or failed resource loads, and confirmed the report float and scan-line animations were active.
+
+## Responsive optimization pass
+
+The responsive layout was audited at 320px, 375px, 390px, 768px, 1024px, and 1366px viewport widths. The pass contains the perspective workflow grid and decorative hero/CTA orbits, replaces mobile demo-stage horizontal expansion with a wrapping two-column layout, hides the desktop header CTA at compact widths, and enables the compact navigation menu through 900px so iPad portrait does not crowd the header. The approved desktop composition remains unchanged.
+
+Production screenshots were captured at 390px phone, 768px iPad portrait, 1024px iPad landscape, and 1366px desktop sizes. The final build also passed the browser overflow audit with no document-level horizontal viewport movement at those sizes.
+
+## Vercel asset-path correction
+
+The research visuals are served from `public/assets/` and are referenced with public URLs: `/assets/evidence-network.png` and `/assets/report-preview.jpg`. `script.js` no longer imports these files as JavaScript modules, and the HTML/CSS references use the same public paths. A clean `npm run build` was run after the change; both files were present in `dist/assets/`, returned HTTP 200 from the Vite production preview, and rendered in Chromium without runtime or failed-resource errors.

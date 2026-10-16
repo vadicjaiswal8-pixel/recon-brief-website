@@ -1,5 +1,5 @@
 Recon Brief Vercel deployment package
-Generated: 2026-10-15
+Generated: 2026-10-16
 
 .gitignore
 README.md
@@ -9,11 +9,9 @@ app.config.ts
 assets/evidence-network.png
 assets/report-preview.jpg
 build.mjs
-dist/assets/evidence-network-CgpYJUu8.png
 dist/assets/evidence-network.png
-dist/assets/index-CrFPaEhl.js
-dist/assets/index-D_usSlqt.css
-dist/assets/report-preview-Bm_TNtwl.jpg
+dist/assets/index-CQZqEG40.css
+dist/assets/index-SuXd93Kk.js
 dist/assets/report-preview.jpg
 dist/favicon.svg
 dist/index.html
