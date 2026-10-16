@@ -16,6 +16,7 @@ dist/assets/report-preview.jpg
 dist/favicon.svg
 dist/index.html
 dist/manus-routes.json
+dist/recon-brief-favicon.svg
 dist/robots.txt
 dist/sitemap.xml
 favicon.svg
@@ -28,6 +29,7 @@ public/assets/evidence-network.png
 public/assets/report-preview.jpg
 public/favicon.svg
 public/manus-routes.json
+public/recon-brief-favicon.svg
 public/robots.txt
 public/sitemap.xml
 robots.txt

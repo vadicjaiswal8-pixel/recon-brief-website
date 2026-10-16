@@ -120,3 +120,7 @@ Production screenshots were captured at 390px phone, 768px iPad portrait, 1024px
 ## Vercel asset-path correction
 
 The research visuals are served from `public/assets/` and are referenced with public URLs: `/assets/evidence-network.png` and `/assets/report-preview.jpg`. `script.js` no longer imports these files as JavaScript modules, and the HTML/CSS references use the same public paths. A clean `npm run build` was run after the change; both files were present in `dist/assets/`, returned HTTP 200 from the Vite production preview, and rendered in Chromium without runtime or failed-resource errors.
+
+## Favicon deployment correction
+
+The site now uses the uniquely named `/recon-brief-favicon.svg?v=2` asset, with both `icon` and `shortcut icon` links. This avoids collisions with Vercel's default `/favicon.svg`. The production build emits `dist/recon-brief-favicon.svg`, and the Vite preview returned it with HTTP 200 and the Recon Brief blue mark.
