@@ -128,3 +128,7 @@ The site now uses the uniquely named `/recon-brief-favicon.svg?v=2` asset, with 
 ## Inline favicon fallback
 
 The live deployment returned 404 for the separately named favicon asset, so the favicon is now embedded directly as a base64 SVG data URL in `index.html`. This removes any dependency on Vercel's public-folder routing for the browser tab icon while retaining the Recon Brief favicon files in the package.
+
+## Animation asset deployment correction
+
+The Evidence Layer network visual and From insight to output report preview now use Vite imports from `assets/`. Vite emits hashed production files such as `evidence-network-*.png` and `report-preview-*.jpg` in `dist/assets`, and the HTML no longer requests the old unbundled `/assets/*.png` or `/assets/*.jpg` paths.

@@ -1,5 +1,8 @@
-document.querySelector('[data-recon-asset="evidence-network"]')?.setAttribute('src','/assets/evidence-network.png');
-document.querySelector('[data-recon-asset="report-preview"]')?.setAttribute('src','/assets/report-preview.jpg');
+import evidenceNetworkUrl from './assets/evidence-network.png';
+import reportPreviewUrl from './assets/report-preview.jpg';
+
+document.querySelector('[data-recon-asset="evidence-network"]')?.setAttribute('src',evidenceNetworkUrl);
+document.querySelector('[data-recon-asset="report-preview"]')?.setAttribute('src',reportPreviewUrl);
 
 const header=document.querySelector('[data-header]');
 const menuToggle=document.querySelector('.menu-toggle');
