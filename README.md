@@ -132,3 +132,7 @@ The live deployment returned 404 for the separately named favicon asset, so the 
 ## Animation asset deployment correction
 
 The Evidence Layer network visual and From insight to output report preview now use Vite imports from `assets/`. Vite emits hashed production files such as `evidence-network-*.png` and `report-preview-*.jpg` in `dist/assets`, and the HTML no longer requests the old unbundled `/assets/*.png` or `/assets/*.jpg` paths.
+
+## Vite-safe animation asset setup
+
+The animation images are intentionally served from `public/assets/` using ordinary public URLs. `script.js` contains no JavaScript image imports, so the project works with the existing Vite 8 configuration without module-resolution errors. The build copies both files to `dist/assets/`.
