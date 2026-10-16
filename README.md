@@ -136,3 +136,7 @@ The Evidence Layer network visual and From insight to output report preview now 
 ## Vite-safe animation asset setup
 
 The animation images are intentionally served from `public/assets/` using ordinary public URLs. `script.js` contains no JavaScript image imports, so the project works with the existing Vite 8 configuration without module-resolution errors. The build copies both files to `dist/assets/`.
+
+## Self-contained animation fallback
+
+The Evidence Layer network and From insight to output report visuals are now generated with inline SVG/CSS motion artwork. They no longer depend on `/assets/evidence-network.png` or `/assets/report-preview.jpg`, so their animations remain available even when a deployment host omits binary public assets.
