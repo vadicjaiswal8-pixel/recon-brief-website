@@ -124,3 +124,7 @@ The research visuals are served from `public/assets/` and are referenced with pu
 ## Favicon deployment correction
 
 The site now uses the uniquely named `/recon-brief-favicon.svg?v=2` asset, with both `icon` and `shortcut icon` links. This avoids collisions with Vercel's default `/favicon.svg`. The production build emits `dist/recon-brief-favicon.svg`, and the Vite preview returned it with HTTP 200 and the Recon Brief blue mark.
+
+## Inline favicon fallback
+
+The live deployment returned 404 for the separately named favicon asset, so the favicon is now embedded directly as a base64 SVG data URL in `index.html`. This removes any dependency on Vercel's public-folder routing for the browser tab icon while retaining the Recon Brief favicon files in the package.
