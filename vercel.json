@@ -1,4 +1,8 @@
 {
   "buildCommand": "vite build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/how-it-works", "destination": "/how-it-works/index.html" }
+  ]
 }
