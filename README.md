@@ -42,20 +42,24 @@ npm install
 npm run build
 ```
 
-The production-ready Vite output is written to `dist/` and includes the generated HTML, hashed CSS and JavaScript bundles, images, favicon, route manifest, sitemap, and robots file. `node build.mjs` remains available as a dependency-free legacy static copy build for local/manual use.
+The production-ready Vite output is written to `dist/` and includes the three generated HTML pages, hashed CSS and JavaScript bundles, and files from `public/`. The Vite build includes `index.html`, `about.html`, and `how-it-works.html`; Vercel's `cleanUrls` setting serves the latter two at `/about` and `/how-it-works`. `node build.mjs` remains available as a dependency-free legacy static copy build for local/manual use.
 
 ## Main files
 
-- `index.html` — semantic marketing page, SEO metadata, navigation, product story, demo, workflows, trust, and CTAs.
+- `index.html` — active Vite homepage entry: semantic marketing page, SEO metadata, navigation, product story, demo, workflows, trust, and CTAs.
+- `about.html` and `how-it-works.html` — the two additional marketing pages, using the shared static-site styles and script.
 - `styles.css` — original blue Recon Brief design system, layout, responsive rules, and motion.
 - `script.js` — navigation, scroll reveal, workflow animation, interactive illustrative demo, and accessible interactions.
-- `assets/` and `public/assets/` — research report and evidence-network imagery.
+- `public/` — the included public icons, robots file, and sitemap. The uploaded baseline does not contain `public/assets/evidence-network.png`, although the existing homepage CSS references that path.
+- `src/` — retained React source tree; it is not imported by the configured root HTML build. `index.html.html` is also retained but is not a Vite entry.
 - `favicon.svg` and `public/favicon.svg` — blue rounded-square Recon Brief mark with a white R.
 - `package.json`, `package-lock.json`, `vite.config.js`, and `vercel.json` — Vite 8/Vercel deployment configuration.
 - `VERCEL_DEPLOYMENT.md` — exact GitHub/Vercel placement, settings, and asset instructions.
 - `build.mjs` — dependency-free legacy static build script.
 - `manus-routes.json`, `sitemap.xml`, `robots.txt` — discovery and route metadata.
 - `app.config.ts` — project logo metadata.
+
+The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site extended with two HTML entries. The separate Recon Brief application is not included in this package.
 
 ## Content and trust notes
 

@@ -1,45 +1,35 @@
 # Recon Brief Vercel Deployment
 
-This package preserves the finalized Recon Brief marketing design and adds the missing Vite deployment structure. The app at `https://app.reconbrief.in/` is not part of this package and is not changed.
+This repository contains the Recon Brief marketing website in its existing Vite and static HTML/CSS/JavaScript format. The separate application at `https://app.reconbrief.in/` is not part of this package and is not changed.
 
 ## Repository placement
 
-1. In the existing `recon-brief-website` repository, switch to the `final-website-deploy` branch.
-2. Replace the branch contents with the files from this package, including `public/assets/`.
-3. Keep the repository root as Vercel's Root Directory (`./`).
-4. Commit and push the complete branch.
+1. Commit the complete project root, including `package.json`, `package-lock.json`, `vite.config.js`, `vercel.json`, the HTML pages, shared CSS/JavaScript, and `public/` files.
+2. Keep the repository root as Vercel's Root Directory (`./`).
+3. Push the intended branch and confirm Vercel is building that branch and commit.
 
 ## Vercel settings
 
-Use these settings:
-
 - Framework Preset: **Vite**
-- Build Command: `vite build` (or `npm run build`)
+- Build Command: `npm run build` (or the configured `vite build`)
 - Output Directory: `dist`
 - Root Directory: `./`
-- Node.js: `24.x`
+- Node.js: **24.x** (as recommended by the existing project setup)
 
-Vercel installs `vite` from `package.json`, runs the Vite build, and publishes the generated `dist/` directory.
+`vite.config.js` lists the homepage and both page HTML entries as build inputs. Vercel publishes the Vite output from `dist/`. `vercel.json` enables clean URLs so `about.html` and `how-it-works.html` are accessible at `/about` and `/how-it-works`, including direct visits and refreshes.
 
-## Important asset requirement
+The Trust & Privacy navigation link intentionally points to `/trust-and-privacy`, but that page is deferred and is not included in the build or sitemap.
 
-Do not upload only the root HTML/CSS/JS files. The `public/` directory must be committed, especially:
+## Files to commit
 
-- `public/assets/evidence-network.png`
-- `public/assets/report-preview.jpg`
-- `public/favicon.svg`
-- `public/manus-routes.json`
-- `public/robots.txt`
-- `public/sitemap.xml`
+Do not upload only selected HTML/CSS/JavaScript files. Commit the complete source tree, including all root configuration and the existing `public/` directory so Vite can copy its public files to `dist/`.
 
-Vite copies these files into `dist/` during `vite build`. The HTML uses Vite-safe relative references for `styles.css` and `script.js`; the CSS uses `/assets/...` paths backed by `public/assets/`.
-
-## Local verification
+## Local production verification
 
 ```bash
-npm install
+npm ci
 npm run build
 npm run preview
 ```
 
-Open the printed preview URL and check the hero, animated report card, evidence map, interactive workflow/demo, output section, and all CTA/navigation links.
+The build should produce `dist/index.html`, `dist/about.html`, and `dist/how-it-works.html`, along with the existing static assets. Check the homepage, both new pages, navigation links, the About FAQ disclosures, and the page metadata. On Vercel, verify the extensionless `/about` and `/how-it-works` routes after deployment; this guide does not claim that a deployment has been performed.

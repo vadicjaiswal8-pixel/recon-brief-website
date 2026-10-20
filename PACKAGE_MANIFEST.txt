@@ -1,46 +1,56 @@
-Recon Brief Vercel deployment package
-Generated: 2026-10-17
+Recon Brief website source package
+Updated: 2026-10-20
 
+This is a source package. Do not commit generated dist/ or node_modules/; Vercel builds dist/ from the committed project root with npm run build.
+
+Root project files:
 .gitignore
+.oxlintrc.json
+PACKAGE_MANIFEST.txt
 README.md
 TODO.md
 VERCEL_DEPLOYMENT.md
-about/index.html
+about.html
 app.config.ts
-assets/evidence-network.png
-assets/report-preview.jpg
 build.mjs
-dist/about/index.html
-dist/assets/evidence-network.png
-dist/assets/report-preview.jpg
-dist/assets/script-C5GOhzXn.js
-dist/assets/script-ErUD78cz.css
-dist/favicon.svg
-dist/how-it-works/index.html
-dist/index.html
-dist/manus-routes.json
-dist/recon-brief-favicon.svg
-dist/recon-brief-logo.svg
-dist/robots.txt
-dist/sitemap.xml
 favicon.svg
-how-it-works/index.html
+how-it-works.html
 index.html
+index.html.html
 manus-routes.json
 package-lock.json
 package.json
 plan.md
-public/assets/evidence-network.png
-public/assets/report-preview.jpg
-public/favicon.svg
-public/manus-routes.json
-public/recon-brief-favicon.svg
-public/recon-brief-logo.svg
-public/robots.txt
-public/sitemap.xml
 robots.txt
 script.js
 sitemap.xml
 styles.css
 vercel.json
 vite.config.js
+
+Public files copied into dist/:
+public/favicon.svg
+public/icons.svg
+public/recon-brief.svg
+public/robots.txt
+public/sitemap.xml
+
+Retained React source tree (not the configured Vite production entry):
+src/App.css
+src/App.jsx
+src/MarketingSite.css
+src/MarketingSite.jsx
+src/assets/hero.png
+src/assets/react.svg
+src/assets/vite.svg
+src/index.css
+src/main.jsx
+
+Vite HTML inputs:
+index.html
+about.html
+how-it-works.html
+
+Vercel serves about.html at /about and how-it-works.html at /how-it-works using cleanUrls: true. The Trust & Privacy link is intentional, but that page is not implemented or listed in the sitemap.
+
+Baseline asset note: this ZIP does not contain public/assets/evidence-network.png, although the existing homepage stylesheet references /assets/evidence-network.png. The Vite build currently emits a warning for that pre-existing missing decorative asset. It was left unchanged to keep this task scoped and preserve the known-working baseline.

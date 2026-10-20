@@ -74,3 +74,12 @@ function runDemo(){
 }
 demoForm?.addEventListener('submit',event=>{event.preventDefault();runDemo()});
 document.querySelectorAll('[data-question]').forEach(button=>button.addEventListener('click',()=>{if(demoQuestion){demoQuestion.value=button.dataset.question;demoQuestion.focus()}}));
+
+
+// Keep the native disclosure state reflected for assistive technologies.
+document.querySelectorAll('details[data-faq]').forEach(item=>{
+  const summary=item.querySelector('summary');
+  const syncExpanded=()=>summary?.setAttribute('aria-expanded',String(item.open));
+  syncExpanded();
+  item.addEventListener('toggle',syncExpanded);
+});
