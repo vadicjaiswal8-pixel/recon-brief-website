@@ -42,7 +42,7 @@ npm install
 npm run build
 ```
 
-The production-ready Vite output is written to `dist/` and includes the built HTML pages, hashed CSS and JavaScript bundles, and files from `public/`. `vite.config.js` discovers eligible root-level HTML pages automatically (excluding the retained `index.html.html` file and common private/test/preview filenames). The production command then regenerates `sitemap.xml` and `robots.txt` at the project root and under `public/`, and writes the deployed copies into `dist/`. The sitemap is built from self-canonical, indexable page URLs. Vercel's `cleanUrls` setting serves `.html` pages without their extensions. `node build.mjs` remains available as a dependency-free legacy static copy build for local/manual use.
+The production-ready Vite output is written to `dist/` and includes the built HTML pages, hashed CSS and JavaScript bundles, and files from `public/`. `vite.config.js` discovers eligible root-level HTML pages automatically (excluding the retained `index.html.html` file and common private/test/preview filenames). The production command then runs the sitemap-only mode in root-level `build.mjs`, regenerating `sitemap.xml` and `robots.txt` at the project root, under `public/`, and in `dist/`. The sitemap is built from self-canonical, indexable page URLs. Vercel's `cleanUrls` setting serves `.html` pages without their extensions. Running `node build.mjs` without arguments remains available as a dependency-free legacy static copy build.
 
 ## Main files
 
@@ -55,9 +55,8 @@ The production-ready Vite output is written to `dist/` and includes the built HT
 - `favicon.svg` and `public/favicon.svg` — blue rounded-square Recon Brief mark with a white R.
 - `package.json`, `package-lock.json`, `vite.config.js`, and `vercel.json` — Vite 8/Vercel deployment configuration.
 - `VERCEL_DEPLOYMENT.md` — exact GitHub/Vercel placement, settings, and asset instructions.
-- `build.mjs` — dependency-free legacy static build script.
+- `build.mjs` — dependency-free legacy static build and the root-level post-Vite sitemap generator (`--sitemap-only`).
 - `manus-routes.json`, `sitemap.xml`, `robots.txt`, `public/sitemap.xml`, and `public/robots.txt` — route discovery and crawler metadata. The generated sitemap is served at the existing `/sitemap.xml` URL from `dist/`.
-- `scripts/generate-sitemap.mjs` — build-time sitemap generator; includes only built HTML with a matching, indexable canonical URL on the preferred host.
 - `app.config.ts` — project logo metadata.
 
 The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site; eligible root-level `.html` pages are automatically built and considered for the sitemap. For a future public SEO page, add its HTML file with a self-canonical `https://www.reconbrief.in/<route>` URL and do not mark it `noindex`; no sitemap URL entry needs to be maintained by hand. The separate Recon Brief application is not included in this package. The baseline also lacks `public/assets/evidence-network.png`, although existing homepage CSS references it; this unrelated asset was not changed.

@@ -1,7 +1,7 @@
 Recon Brief website source package
 Updated: 2026-10-21
 
-This is a source package. Do not commit generated dist/ or node_modules/; Vercel runs npm run build from the project root. That command builds eligible root HTML pages and generates the existing /sitemap.xml from indexable canonical page URLs.
+This is a source package. Do not commit generated dist/ or node_modules/; Vercel runs npm run build from the project root. The command builds eligible root HTML pages, then runs the sitemap-only mode of the root-level build.mjs.
 
 Root project files:
 .gitignore
@@ -28,9 +28,6 @@ styles.css
 vercel.json
 vite.config.js
 
-Sitemap generator:
-scripts/generate-sitemap.mjs
-
 Public files copied into dist/:
 public/favicon.svg
 public/icons.svg
@@ -38,7 +35,9 @@ public/recon-brief.svg
 public/robots.txt
 public/sitemap.xml
 
-The sitemap URL remains https://www.reconbrief.in/sitemap.xml. www is the preferred host because production redirects non-www requests to www. The build synchronizes sitemap.xml and robots.txt at the project root, under public/, and in dist/. The root-level filenames are retained for compatibility with the original project package and deployment workflows.
+build.mjs has two modes: its default dependency-free static copy build and --sitemap-only, used after Vite. The sitemap mode is colocated with package.json at the project root, scans the built HTML, and synchronizes sitemap.xml and robots.txt at the root, under public/, and in dist/. This avoids relying on a nested generator file being present in the deployment.
+
+The sitemap URL remains https://www.reconbrief.in/sitemap.xml. www is the preferred host because production redirects non-www requests to www.
 
 Retained React source tree (not imported by the configured root HTML build):
 src/App.css
