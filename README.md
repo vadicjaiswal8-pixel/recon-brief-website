@@ -42,7 +42,7 @@ npm install
 npm run build
 ```
 
-The production-ready Vite output is written to `dist/` and includes the three generated HTML pages, hashed CSS and JavaScript bundles, and files from `public/`. The Vite build includes `index.html`, `about.html`, and `how-it-works.html`; Vercel's `cleanUrls` setting serves the latter two at `/about` and `/how-it-works`. `node build.mjs` remains available as a dependency-free legacy static copy build for local/manual use.
+The production-ready Vite output is written to `dist/` and includes the built HTML pages, hashed CSS and JavaScript bundles, and files from `public/`. `vite.config.js` discovers eligible root-level HTML pages automatically (excluding the retained `index.html.html` file and common private/test/preview filenames). The production command then rebuilds `public/sitemap.xml` and `dist/sitemap.xml` from the built pages' self-canonical, indexable URLs. Vercel's `cleanUrls` setting serves `.html` pages without their extensions. `node build.mjs` remains available as a dependency-free legacy static copy build for local/manual use.
 
 ## Main files
 
@@ -50,16 +50,17 @@ The production-ready Vite output is written to `dist/` and includes the three ge
 - `about.html` and `how-it-works.html` — the two additional marketing pages, using the shared static-site styles and script.
 - `styles.css` — original blue Recon Brief design system, layout, responsive rules, and motion.
 - `script.js` — navigation, scroll reveal, workflow animation, interactive illustrative demo, and accessible interactions.
-- `public/` — the included public icons, robots file, and sitemap. The uploaded baseline does not contain `public/assets/evidence-network.png`, although the existing homepage CSS references that path.
+- `public/` — the included public icons, authoritative `robots.txt`, and generated sitemap snapshot. `robots.txt` identifies `https://www.reconbrief.in/sitemap.xml`; www is the observed preferred host because non-www redirects there.
 - `src/` — retained React source tree; it is not imported by the configured root HTML build. `index.html.html` is also retained but is not a Vite entry.
 - `favicon.svg` and `public/favicon.svg` — blue rounded-square Recon Brief mark with a white R.
 - `package.json`, `package-lock.json`, `vite.config.js`, and `vercel.json` — Vite 8/Vercel deployment configuration.
 - `VERCEL_DEPLOYMENT.md` — exact GitHub/Vercel placement, settings, and asset instructions.
 - `build.mjs` — dependency-free legacy static build script.
-- `manus-routes.json`, `sitemap.xml`, `robots.txt` — discovery and route metadata.
+- `manus-routes.json`, `public/sitemap.xml`, and `public/robots.txt` — route discovery and crawler metadata. The generated sitemap itself is served at `/sitemap.xml` from `dist/`; inactive root-level sitemap and robots duplicates were removed.
+- `scripts/generate-sitemap.mjs` — build-time sitemap generator; includes only built HTML with a matching, indexable canonical URL on the preferred host.
 - `app.config.ts` — project logo metadata.
 
-The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site extended with two HTML entries. The separate Recon Brief application is not included in this package.
+The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site; eligible root-level `.html` pages are automatically built and considered for the sitemap. For a future public SEO page, add its HTML file with a self-canonical `https://www.reconbrief.in/<route>` URL and do not mark it `noindex`; no sitemap URL entry needs to be maintained by hand. The separate Recon Brief application is not included in this package. The baseline also lacks `public/assets/evidence-network.png`, although existing homepage CSS references it; this unrelated asset was not changed.
 
 ## Content and trust notes
 

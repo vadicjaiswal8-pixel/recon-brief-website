@@ -11,12 +11,14 @@ This repository contains the Recon Brief marketing website in its existing Vite 
 ## Vercel settings
 
 - Framework Preset: **Vite**
-- Build Command: `npm run build` (or the configured `vite build`)
+- Build Command: `npm run build` (required so the generated sitemap step runs)
 - Output Directory: `dist`
 - Root Directory: `./`
 - Node.js: **24.x** (as recommended by the existing project setup)
 
-`vite.config.js` lists the homepage and both page HTML entries as build inputs. Vercel publishes the Vite output from `dist/`. `vercel.json` enables clean URLs so `about.html` and `how-it-works.html` are accessible at `/about` and `/how-it-works`, including direct visits and refreshes.
+`vite.config.js` automatically discovers eligible root-level HTML pages as build inputs. Vercel publishes the Vite output from `dist/`. `vercel.json` enables clean URLs so `.html` pages are accessible without their extension, including direct visits and refreshes. The configured build command runs `scripts/generate-sitemap.mjs` after Vite; it scans the built HTML and includes only pages with a matching, self-canonical, indexable URL on the preferred host. It updates the existing `public/sitemap.xml` source snapshot and the served `dist/sitemap.xml` at `/sitemap.xml`.
+
+The live non-www host currently responds with a permanent redirect to `https://www.reconbrief.in/`. This project therefore uses `www` in canonical URLs, structured site URLs, and the absolute sitemap directive in robots.txt. No redirect behavior is configured or changed by this project update. For a future public SEO landing page, add a root-level `<slug>.html` file with a self-canonical URL such as `https://www.reconbrief.in/<slug>`; it is discovered and added to the sitemap during the normal build. Pages without a canonical URL, marked `noindex`, using another host, or matching private/test/redirect exclusions are omitted.
 
 The Trust & Privacy navigation link intentionally points to `/trust-and-privacy`, but that page is deferred and is not included in the build or sitemap.
 
@@ -32,4 +34,4 @@ npm run build
 npm run preview
 ```
 
-The build should produce `dist/index.html`, `dist/about.html`, and `dist/how-it-works.html`, along with the existing static assets. Check the homepage, both new pages, navigation links, the About FAQ disclosures, and the page metadata. On Vercel, verify the extensionless `/about` and `/how-it-works` routes after deployment; this guide does not claim that a deployment has been performed.
+The build should produce the configured HTML pages, static assets, and a generated `dist/sitemap.xml`. Check that the sitemap URLs parse and that each points to an accessible page. On Vercel, verify the extensionless routes and `/sitemap.xml` after deployment; this guide does not claim that a deployment has been performed.

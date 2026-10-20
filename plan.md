@@ -25,7 +25,7 @@ A public, responsive marketing website for Recon Brief. The page sells the produ
 - `public/assets/`: research report and evidence-network images used intentionally in the hero and evidence sections.
 - `public/manus-routes.json`: declares `/` as the public page route.
 - `app.config.ts`: durable project logo metadata.
-- `sitemap.xml` and `robots.txt`: public discovery documents.
+- `public/sitemap.xml` and `public/robots.txt`: public discovery documents; `scripts/generate-sitemap.mjs` refreshes the sitemap from eligible built HTML pages.
 
 ## Public page sections
 1. Sticky navigation and hero promise.
