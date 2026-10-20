@@ -189,7 +189,7 @@ html,body{overflow-x:clip}
 .contact-links{position:relative;z-index:1;display:flex;gap:12px 20px;flex-wrap:wrap;margin-top:32px;padding-top:17px;border-top:1px solid var(--line);font:10px var(--mono)}
 .contact-links a,.cta-support a{color:var(--blue);text-decoration:none}
 .contact-links a:hover,.cta-support a:hover{text-decoration:underline}
-.workflow-hero-visual{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:center;min-height:230px;padding:35px 20px 45px;border:1px solid var(--line);background:radial-gradient(ellipse at center,rgba(30,91,122,.19),rgba(8,17,23,.15) 68%)}
+.workflow-hero-visual{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:center;min-height:230px;padding:35px 20px 45px;border:1px solid var(--line);background:radial-gradient(ellipse at center,rgba(30,91,122,.19),rgba(8,17,23,.15) 68%)}
 .workflow-hero-line{position:absolute;top:50%;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--mint),var(--blue),transparent)}
 .workflow-hero-node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 .workflow-hero-node span{display:grid;place-items:center;width:42px;height:42px;border:1px solid rgba(100,181,232,.6);border-radius:50%;background:var(--ink-2);color:var(--blue);font:10px var(--mono)}
