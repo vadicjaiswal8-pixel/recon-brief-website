@@ -30,6 +30,7 @@ vite.config.js
 
 Public files copied into dist/:
 public/favicon.svg
+public/favicon.png
 public/icons.svg
 public/recon-brief.svg
 public/robots.txt

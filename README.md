@@ -52,7 +52,7 @@ The production-ready Vite output is written to `dist/` and includes the built HT
 - `script.js` — navigation, scroll reveal, workflow animation, interactive illustrative demo, and accessible interactions.
 - `public/` — the included public icons, `robots.txt`, and generated sitemap snapshot. The root-level `sitemap.xml` and `robots.txt` are preserved for compatibility and synchronized by the build. Both identify `https://www.reconbrief.in/sitemap.xml`; www is the observed preferred host because non-www redirects there.
 - `src/` — retained React source tree; it is not imported by the configured root HTML build. `index.html.html` is also retained but is not a Vite entry.
-- `favicon.svg` and `public/favicon.svg` — blue rounded-square Recon Brief mark with a white R.
+- `favicon.svg`, `public/favicon.svg`, `public/favicon.png`, and `public/recon-brief.svg` — existing mint-tile, geometric navy Recon Brief mark with its light-blue accent; pages use the 64×64 PNG favicon.
 - `package.json`, `package-lock.json`, `vite.config.js`, and `vercel.json` — Vite 8/Vercel deployment configuration.
 - `VERCEL_DEPLOYMENT.md` — exact GitHub/Vercel placement, settings, and asset instructions.
 - `build.mjs` — dependency-free legacy static build and the root-level post-Vite sitemap generator (`--sitemap-only`).
