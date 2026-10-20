@@ -135,8 +135,41 @@ async function generateSitemap() {
     throw new Error(`The generated sitemap must include the canonical homepage ${preferredOrigin}/`);
   }
 
-  const robots = await readFile(resolve(projectRoot, 'public/robots.txt'), 'utf8');
+  const robotsSource = await readFile(resolve(projectRoot, 'public/robots.txt'), 'utf8');
+  const robotsLines = robotsSource.split(/\r?\n/);
+  const directiveLines = robotsLines
+    .map((line, index) => ({ line, index }))
+    .filter(({ line }) => /^\s*Sitemap\s*:/i.test(line));
+  if (directiveLines.length !== 1) {
+    throw new Error(`public/robots.txt must contain exactly one Sitemap directive for ${preferredOrigin}/sitemap.xml`);
+  }
+
+  const directiveMatch = directiveLines[0].line.match(/^\s*Sitemap\s*:\s*(\S+)\s*$/i);
+  if (!directiveMatch) {
+    throw new Error('public/robots.txt contains a malformed Sitemap directive.');
+  }
+
+  let sourceSitemapUrl;
+  try {
+    sourceSitemapUrl = new URL(directiveMatch[1]);
+  } catch {
+    throw new Error('public/robots.txt must use a valid absolute HTTPS sitemap URL.');
+  }
+  if (
+    sourceSitemapUrl.protocol !== 'https:'
+    || !['reconbrief.in', 'www.reconbrief.in'].includes(sourceSitemapUrl.hostname)
+    || sourceSitemapUrl.pathname !== '/sitemap.xml'
+    || sourceSitemapUrl.search
+    || sourceSitemapUrl.hash
+    || sourceSitemapUrl.username
+    || sourceSitemapUrl.password
+  ) {
+    throw new Error('public/robots.txt Sitemap directive must target the Recon Brief sitemap over HTTPS.');
+  }
+
   const expectedSitemapDirective = `Sitemap: ${preferredOrigin}/sitemap.xml`;
+  robotsLines[directiveLines[0].index] = expectedSitemapDirective;
+  const robots = robotsLines.join('\n');
   if (!robots.split(/\r?\n/).some((line) => line.trim() === expectedSitemapDirective)) {
     throw new Error(`public/robots.txt must include ${expectedSitemapDirective}`);
   }
@@ -152,6 +185,7 @@ async function generateSitemap() {
   await Promise.all([
     writeFile(resolve(projectRoot, 'sitemap.xml'), xml, 'utf8'),
     writeFile(resolve(projectRoot, 'public/sitemap.xml'), xml, 'utf8'),
+    writeFile(resolve(projectRoot, 'public/robots.txt'), robots, 'utf8'),
     writeFile(resolve(projectRoot, 'robots.txt'), robots, 'utf8'),
     writeFile(resolve(outputRoot, 'sitemap.xml'), xml, 'utf8'),
     writeFile(resolve(outputRoot, 'robots.txt'), robots, 'utf8'),
