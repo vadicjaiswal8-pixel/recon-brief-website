@@ -1,5 +1,5 @@
 Recon Brief website source package
-Updated: 2026-10-20
+Updated: 2026-10-21
 
 This is a source package. Do not commit generated dist/ or node_modules/; Vercel runs npm run build from the project root. That command builds eligible root HTML pages and generates the existing /sitemap.xml from indexable canonical page URLs.
 
@@ -21,7 +21,9 @@ manus-routes.json
 package-lock.json
 package.json
 plan.md
+robots.txt
 script.js
+sitemap.xml
 styles.css
 vercel.json
 vite.config.js
@@ -36,7 +38,7 @@ public/recon-brief.svg
 public/robots.txt
 public/sitemap.xml
 
-The sitemap URL remains https://www.reconbrief.in/sitemap.xml. www is the preferred host because production redirects non-www requests to www. The generator updates public/sitemap.xml and dist/sitemap.xml during npm run build. Inactive root-level sitemap.xml and robots.txt duplicates were removed; the public files are the authoritative crawler configuration.
+The sitemap URL remains https://www.reconbrief.in/sitemap.xml. www is the preferred host because production redirects non-www requests to www. The build synchronizes sitemap.xml and robots.txt at the project root, under public/, and in dist/. The root-level filenames are retained for compatibility with the original project package and deployment workflows.
 
 Retained React source tree (not imported by the configured root HTML build):
 src/App.css
@@ -49,7 +51,7 @@ src/assets/vite.svg
 src/index.css
 src/main.jsx
 
-Root HTML page entries are discovered automatically by Vite. index.html.html and common private, test, preview, draft, redirect, and error-page filenames are excluded. The sitemap further requires a self-canonical HTTPS URL on www.reconbrief.in, excludes noindex pages and private/test routes, and requires the canonical path to match the built HTML route.
+Root HTML page entries are discovered automatically by Vite. index.html.html and common private, test, preview, draft, redirect, and error-page filenames are excluded. The sitemap further requires a self-canonical HTTPS URL on www.reconbrief.in, excludes noindex pages and private/test routes, excludes Vercel-configured redirect sources, and requires the canonical path to match the built HTML route.
 
 Current sitemap pages:
 https://www.reconbrief.in/
