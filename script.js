@@ -83,3 +83,12 @@ document.querySelectorAll('details[data-faq]').forEach(item=>{
   syncExpanded();
   item.addEventListener('toggle',syncExpanded);
 });
+
+
+// Keep the native footer Explore disclosure state reflected for assistive technologies.
+document.querySelectorAll('details[data-footer-explore]').forEach(item=>{
+  const summary=item.querySelector('summary');
+  const syncExpanded=()=>summary?.setAttribute('aria-expanded',String(item.open));
+  syncExpanded();
+  item.addEventListener('toggle',syncExpanded);
+});
