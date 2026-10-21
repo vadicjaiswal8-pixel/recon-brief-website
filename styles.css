@@ -230,3 +230,25 @@ html,body{overflow-x:clip}
 @media(max-width:740px){.content-page{padding-top:70px}.page-hero{min-height:0;grid-template-columns:1fr;gap:35px;padding-top:75px;padding-bottom:60px}.page-hero h1{font-size:clamp(45px,12vw,66px)}.page-lede{font-size:14px}.page-hero-art{height:300px}.workflow-hero-visual{min-height:190px;padding-left:12px;padding-right:12px}.workflow-hero-node strong{font-size:13px}.page-section,.page-dark-section{padding-top:76px;padding-bottom:76px}.page-section>.section-heading{display:block;margin-bottom:32px}.page-section .section-heading>p{margin-top:18px}.six-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.page-info-card{min-height:205px;padding:19px}.approach-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.approach-step{min-height:190px;padding:22px 14px 22px 0;border-bottom:1px solid var(--line)}.approach-step+.approach-step{padding-left:14px}.approach-step:nth-child(2){border-right:0}.approach-step:nth-child(3){padding-left:0}.approach-step:nth-child(3),.approach-step:nth-child(4){border-bottom:0}.approach-step h3{margin-top:25px}.audience-grid{grid-template-columns:1fr}.about-faq summary{grid-template-columns:32px minmax(0,1fr) 23px;gap:10px;min-height:70px;padding-left:2px;padding-right:2px}.about-faq .faq-question{font-size:19px}.about-faq-answer p{padding-left:44px;padding-right:32px;font-size:12px}.about-faq[open] .about-faq-answer p{padding-bottom:19px}.page-cta-frame{padding:48px 24px}.page-final-cta{padding-bottom:76px}.contact-links{gap:13px 16px}.workflow-detail{grid-template-columns:57px minmax(0,1fr);gap:15px;padding:32px 0}.workflow-detail-content p,.workflow-detail-content li{font-size:12px}.depth-grid{grid-template-columns:1fr}.depth-card{min-height:0;padding:22px}.depth-card h3{margin-top:18px}.tips-grid{grid-template-columns:1fr}.responsible-section{grid-template-columns:34px minmax(0,1fr);gap:15px;margin-bottom:76px;padding:22px 17px}.responsible-section h2{font-size:28px}}
 @media(max-width:420px){.six-cards{grid-template-columns:1fr}.page-info-card{min-height:0;padding:20px}.page-info-card h3{margin-top:13px}.workflow-hero-visual{gap:3px;padding-left:7px;padding-right:7px}.workflow-hero-node span{width:36px;height:36px}.workflow-hero-node strong{font-size:11px}.workflow-hero-visual>p{left:10px;font-size:7px}.workflow-detail{grid-template-columns:42px minmax(0,1fr);gap:12px}.workflow-detail-number{font-size:33px}.research-caution{padding:14px}.contact-links{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.page-art-orbit{animation:none}.page-info-card,.faq-chevron,.about-faq-answer,.about-faq-answer p{transition:none}}
+
+
+/* Research Methodology page */
+.methodology-central-principle{margin:30px auto 70px;padding:clamp(28px,6vw,72px);border:1px solid rgba(100,181,232,.28);background:linear-gradient(125deg,rgba(16,40,54,.86),rgba(10,22,29,.88));text-align:center}
+.methodology-central-principle blockquote{max-width:950px;margin:20px auto 0;color:var(--paper);font:500 clamp(32px,5.4vw,62px)/.98 var(--serif);letter-spacing:-.06em}
+.methodology-central-principle>p{max-width:700px;margin:20px auto 0;color:var(--muted);font-size:13px;line-height:1.7}
+.methodology-principle-card{display:flex;flex-direction:column}
+.methodology-principle-card h4{margin:18px 0 8px;color:var(--faint);font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+.methodology-questions{margin:0 0 18px;padding-left:18px;color:var(--muted);font-size:12px;line-height:1.65}
+.methodology-questions li+li{margin-top:7px}
+.methodology-questions li::marker{color:var(--blue)}
+.methodology-warning{margin-top:auto;padding:12px;border-left:2px solid var(--blue);background:rgba(100,181,232,.06);color:var(--muted);font-size:11px;line-height:1.6}
+.methodology-warning strong{color:var(--blue);font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.methodology-warning p{margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.6}
+.methodology-check-group{min-width:0;margin:15px 0 0;padding:0;border:0}
+.methodology-check-group legend{margin-bottom:11px;color:var(--faint);font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+.methodology-check-group label{display:flex;align-items:flex-start;gap:10px;margin-top:12px;color:var(--muted);font-size:12px;line-height:1.6;cursor:pointer}
+.methodology-check-group input{width:15px;height:15px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--blue)}
+.methodology-check-group input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.methodology-check-group input:checked+span{color:var(--faint);text-decoration:line-through;text-decoration-thickness:1px}
+@media(max-width:740px){.methodology-central-principle{margin:8px auto 38px;padding:34px 24px}.methodology-central-principle blockquote{font-size:clamp(30px,9vw,46px)}}
+.methodology-checklist-section:before{pointer-events:none}
