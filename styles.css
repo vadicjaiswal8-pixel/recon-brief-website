@@ -252,3 +252,14 @@ html,body{overflow-x:clip}
 .methodology-check-group input:checked+span{color:var(--faint);text-decoration:line-through;text-decoration-thickness:1px}
 @media(max-width:740px){.methodology-central-principle{margin:8px auto 38px;padding:34px 24px}.methodology-central-principle blockquote{font-size:clamp(30px,9vw,46px)}}
 .methodology-checklist-section:before{pointer-events:none}
+
+/* Competitor-analysis page: extend existing cards without changing shared components. */
+.competitor-lenses .page-info-card{min-height:0}
+.competitor-lens-card h4{margin:18px 0 7px;color:var(--blue);font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.competitor-lens-card ul{display:grid;gap:6px;margin:0;padding-left:16px;color:var(--muted);font-size:11px;line-height:1.65}
+.competitor-lens-card li::marker{color:var(--blue)}
+.competitor-framework-note{margin:38px 0 0}
+.competitor-framework-note h2{margin:14px 0;font:500 clamp(26px,3.6vw,42px)/1.07 var(--serif);letter-spacing:-.05em}
+.competitor-framework-note p{max-width:780px;color:var(--muted);font-size:13px;line-height:1.75}
+.competitor-framework-note .text-link{display:inline-flex;margin-top:5px}
+.market-research-questions-section:before{pointer-events:none}
