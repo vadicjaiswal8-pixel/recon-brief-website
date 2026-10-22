@@ -1,8 +1,9 @@
 
 
-## October 2026 visual consistency and responsive QA
+## October 2026 social sharing metadata and llms.txt implementation
 
-- [x] Apply a shared dual-tone hero treatment to all six public page headings using the existing blue accent and serif display system while preserving approved wording.
-- [x] Correct the homepage use-case card link collision by returning links to normal document flow and preserving existing card styling and interactions.
-- [x] Verify hero wrapping, header fit, card stacking, and illustration containment at 1440px, 1280px, 1024px, 768px, 390px, and 360px with headless Chromium renders; browser spot-checks were also performed at the available 1280px Sandbox viewport.
-- [x] Preserve routes, metadata, internal links, report-depth options, workflow terminology, framework names, static Vite architecture, and existing animations/interactions.
+- [x] Repair the Competitor Analysis social-image publication path through the existing public-asset build flow while preserving the 1200 × 630 PNG and existing absolute metadata URL.
+- [x] Create and include page-specific 1200 × 630 PNG social cards for the homepage, About, How It Works, AI Market Research, and Research Methodology; reuse the existing Competitor Analysis card unchanged.
+- [x] Add exactly one `og:image` and one `twitter:image` set to each of the six public marketing pages, use `summary_large_image` consistently, preserve existing titles, descriptions, canonicals, Open Graph core metadata, and do not add an unverified `twitter:site` handle.
+- [x] Add concise public `public/llms.txt` documentation with the six marketing-page links and the publicly described Quick Answer, Standard Report, and Deep Analysis options; do not create `llms-full.txt`, change sitemap behavior, change robots.txt, create Trust & Privacy content, or touch the application.
+- [x] Validate the documented build, generated HTML, metadata uniqueness, image dimensions and MIME types, dist inclusion, llms.txt output, and Vite-served extensionless routes locally without deploying.
