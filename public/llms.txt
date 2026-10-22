@@ -1,0 +1,18 @@
+# Recon Brief
+
+> Recon Brief is an AI-assisted research and intelligence platform designed to help organize research questions, relevant material, findings, evidence, uncertainty, and limitations into structured working outputs for review.
+
+Recon Brief’s public website describes research uses including market research, competitive intelligence, company research, academic research, research studies, and presentation preparation. The website presents a five-stage conceptual workflow: Define, Research, Evidence, Analyze, and Report. Results and available functionality depend on the current application workflow and the material available for review.
+
+## Public resources
+
+- [Recon Brief homepage](https://www.reconbrief.in/): Evidence-backed research intelligence.
+- [About Recon Brief](https://www.reconbrief.in/about): Intended research uses, approach, and audience.
+- [How Recon Brief Works](https://www.reconbrief.in/how-it-works): The five-stage research workflow.
+- [AI Market Research](https://www.reconbrief.in/ai-market-research): Guidance on market questions, scope, sources, and evidence.
+- [Competitor Analysis](https://www.reconbrief.in/competitor-analysis): A five-lens structure for company and competitor research.
+- [Research Methodology](https://www.reconbrief.in/research-methodology): The Evidence Review Framework for reviewing research support and limitations.
+
+## Report-depth options
+
+The public homepage describes three illustrative report-depth options: **Quick Answer** for a concise response to a focused question, **Standard Report** for structured coverage of core findings and supporting information, and **Deep Analysis** for broader evidence, comparisons, reasoning, and limitations where available. These descriptions are informational; the current application’s available functionality may vary.
