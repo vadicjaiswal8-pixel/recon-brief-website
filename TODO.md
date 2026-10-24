@@ -18,3 +18,12 @@
 - [ ] Report the discovered discrepancy: the existing marketing pages include Google Analytics 4, which conflicts with the supplied “We use no analytics, advertising or tracking tools” disclosure; do not remove or add tracking as part of this page task.
 - [x] Link the page through the existing header/footer Trust & Privacy links, add the route to `manus-routes.json`, and allow the existing sitemap build to include its canonical URL.
 - [x] Run the existing build and route/content checks without deploying or changing the research engine, authentication, database schema, account-deletion behavior, or unrelated application functionality.
+
+
+## October 2026 public-release cleanup
+
+- [x] Remove the visible IMPORTANT BEFORE PUBLICATION warning, publication-review status, and internal discrepancy notes from the public Trust & Privacy page.
+- [x] Keep the existing premium layout, typography, colors, sections, table of contents, and responsive behavior unchanged.
+- [x] Verify the existing Google Analytics 4 implementation on the public marketing pages and disclose its current use on the public Trust & Privacy page instead of claiming that the site uses no analytics or tracking.
+- [x] Move unresolved Supabase, provider-term, authenticated account-deletion, and application-level verification notes to `TRUST-PRIVACY-REVIEW.md`, outside the public route and public assets.
+- [ ] Confirm application-level claims against the authenticated application before making more specific regional, retention, deletion, training, or security statements.
