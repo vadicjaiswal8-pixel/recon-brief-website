@@ -1,5 +1,15 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/samples/company-research/the-whole-truth-foods",
+      "destination": "/samples-company-research-the-whole-truth-foods.html"
+    },
+    {
+      "source": "/samples/company-research/the-whole-truth-foods/",
+      "destination": "/samples-company-research-the-whole-truth-foods.html"
+    }
+  ]
 }

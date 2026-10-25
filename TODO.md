@@ -10,3 +10,10 @@
 - [x] Add report metadata identifying Company Research, The Whole Truth Foods, Company Research Report, Standard Analysis, and 12 sources without inventing an author, publication date, verification badge, or source URL.
 - [x] Preserve the existing Recon Brief design system, public static architecture, authentication/application boundaries, unrelated routes, research engine, and existing functionality. Do not add dependencies or backend/database changes.
 - [x] Validate navigation, direct routes, canonical metadata, sitemap inclusion, table integrity, absence of raw Markdown table syntax, complete section order, E1–E12 presence, responsive desktop/mobile rendering, and the existing build.
+
+## October 2026 Samples report 404 fix
+
+- [x] Trace the Samples link, route manifest, report source, Vite HTML input discovery, generated output, sitemap, and Vercel configuration; confirm the live deployment served Samples but omitted the report artifact and sitemap URL.
+- [x] Move the complete report into a guaranteed root-level static build artifact and add exact Vercel rewrites for the clean report URL and trailing-slash variant; do not add a broad SPA rewrite.
+- [x] Rebuild and verify the report artifact, 3 semantic tables, 13 report sections, Evidence Registry, canonical sitemap URL, and exact rewrite targets.
+- [ ] Redeploy through the user’s Vercel account and verify the live URL; this remains open because this workspace has no Vercel authentication.

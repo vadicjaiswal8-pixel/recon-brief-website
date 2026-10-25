@@ -45,6 +45,9 @@ function canonicalHref(html) {
 function routeForBuiltHtml(relativePath) {
   const webPath = relativePath.split(sep).join('/');
   if (webPath === 'index.html') return '/';
+  if (webPath === 'samples-company-research-the-whole-truth-foods.html') {
+    return '/samples/company-research/the-whole-truth-foods';
+  }
   if (webPath.endsWith('/index.html')) return `/${webPath.slice(0, -'/index.html'.length)}`;
   if (!webPath.toLowerCase().endsWith('.html')) return null;
   const stem = webPath.slice(0, -'.html'.length);
