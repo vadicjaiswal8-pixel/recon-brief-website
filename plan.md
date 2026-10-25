@@ -1,69 +1,27 @@
-# Recon Brief marketing website plan
-
-## Product scope
-A public, responsive marketing website for Recon Brief. The page sells the product as an evidence-backed AI research and intelligence workspace and routes visitors toward exploring or starting the workspace.
-
-## Design direction
-- **Design movement:** Editorial intelligence interface — a blend of premium research publication, observatory dashboard, and modern blue technical instrument.
-- **Core principles:** Make evidence visible; lead with a decision-oriented story; use blue semantically for trust/progress; keep motion structured and restrained.
-- **Color philosophy:** Deep ink/navy foundations create a quiet research-room atmosphere. Recon blue is the only signature accent and marks action, evidence links, confidence, and progress. Soft paper neutrals support editorial readability; mint is reserved for verified/ready states.
-- **Layout paradigm:** A narrative vertical scroll with a left-anchored editorial rail, offset evidence panels, and a report preview that visually bridges marketing to the workspace.
-- **Signature elements:** Blue evidence-network lines, report-page imagery with scan lines, and numbered research stages.
-- **Interaction philosophy:** Hover and scroll interactions expose relationships: source-to-claim links, report sections, and workflow progress. CTAs feel like opening the research instrument, not generic SaaS signup buttons.
-- **Animation:** Slow ambient network drift; fast, short interaction responses; structured stage reveals; one-time scroll reveals with reduced-motion support.
-- **Typography:** Newsreader/DM Sans/DM Mono. Newsreader carries editorial trust, DM Sans keeps interface copy legible, DM Mono labels stages and evidence metadata.
-- **Brand essence:** “Turn scattered sources into decision-ready intelligence.” Personality: rigorous, composed, curious.
-- **Brand voice:** Headlines are direct and confident; CTAs are specific. Examples: “From question to decision.” and “Open the research instrument.”
-- **Wordmark & logo:** A compact blue R mark paired with a serif Recon Brief wordmark, with a mono “research intelligence” descriptor.
-- **Signature brand color:** Recon Blue `#64B5E8`.
-
-## Implementation
-- Plain static HTML/CSS/JS on Webdev port 3000 for fast, crawler-visible initial content and no backend secrets.
-- `index.html`: all public marketing copy and semantic sections.
-- `styles.css`: responsive layout, blue visual system, report/evidence imagery treatment, motion, reduced-motion rules.
-- `script.js`: accessible mobile nav, scroll reveal, active workflow stage, FAQ/accordion, CTA interactions, and pointer parallax.
-- `public/assets/`: research report and evidence-network images used intentionally in the hero and evidence sections.
-- `public/manus-routes.json`: declares `/` as the public page route.
-- `app.config.ts`: durable project logo metadata.
-- `public/sitemap.xml` and `public/robots.txt`: public discovery documents; `scripts/generate-sitemap.mjs` refreshes the sitemap from eligible built HTML pages.
-
-## Public page sections
-1. Sticky navigation and hero promise.
-2. Product proof strip with grounded-source metrics.
-3. Five-stage research workflow.
-4. Evidence traceability split section.
-5. Market/competitive intelligence use cases.
-6. Report and presentation outputs showcase.
-7. Trust/privacy section.
-8. Conversion CTA and footer.
-
-## Material constraints
-No API keys, credentials, private app data, or backend details in client code. Use only public, local visual assets and static marketing copy.
 
 
-## Iteration 2 — product demonstration
-The page now prioritizes conversion through a deterministic sample-brief console after the proof strip. Visitors can enter or select a question, then watch Define → Research → Evidence → Analyze → Report progress with changing copy and grounded output status. A comparison section explicitly contrasts a generic AI answer with Recon Brief's visible research trail. The hero now names market, competitive, and complex-question use cases directly and routes to the demo instead of a vague workspace CTA.
+## October 2026 Samples experience extension
 
+### Implementation approach
 
+Extend the existing static HTML/Vite marketing site with two public pages: `/samples` and `/samples/company-research/the-whole-truth-foods`. Reuse the current header, footer, typography, colors, spacing, navigation, and responsive behavior. Add Samples links to the existing active marketing-page headers and footers. Keep the landing-page categories in a reusable data-driven structure in `samples.html`; only Company Research links to a working report page, while Market Research, Competitive Intelligence, Academic Research, and Custom Research remain explicit non-interactive Coming Soon cards.
 
-## Content and trust refinement
-The existing visual composition remains the source of truth. This refinement updates only product language and link behavior: the site now describes Recon Brief as an AI-assisted research and competitive-intelligence platform covering market, competitive, academic, study, company, and presentation workflows; removes unsupported numerical claims and verification language; labels visual reports and the interactive path as illustrative; uses the rounded blue/white-R mark; and sends primary application CTAs to https://app.reconbrief.in/.
+Render the supplied Whole Truth Foods Markdown as semantic HTML in the report page. Preserve the source order and complete content, including real HTML tables for Company Snapshot, Financial & Operating Performance, and Evidence Registry; real lists; headings; paragraphs; evidence references; interpretation notes; research gaps; Evidence Check findings; and all E1–E12 registry rows. Use horizontal table scrolling on small screens rather than clipping or flattening tables. Add public canonical, Open Graph, and Twitter metadata using existing brand assets without inventing authors, dates, source URLs, or verification claims.
 
+### Project structure
 
+The root-level HTML files remain the public page entries. `samples.html` owns the category-selection experience; `samples-company-research-whole-truth-foods.html` owns the complete sample report view. `styles.css` receives scoped Samples/report styles; `manus-routes.json` declares both routes; `build.mjs` continues to discover canonical pages and generate sitemap/robots outputs. Existing application/source files, static assets, and report-generation functionality remain untouched.
 
-## Focused app-animation correction
-The original app source was located in `/home/ubuntu/recon-redesign/index.html` and `/home/ubuntu/recon-redesign/style.css`. Its `.rb-hero-proof` component and `proof-float`/`scan` behavior are reused in the marketing website's existing output-center visual as `.app-hero-animation`. The surrounding output heading, three cards, section proportions, and responsive layout remain intact. The Research Layer was inspected and requires no content or structural change: its current paragraph and four descriptive columns contain no unsupported metrics or verification claims.
+### Design decisions
 
-
-## Vite/Vercel deployment hardening
-
-The approved HTML/CSS/JavaScript design remains the source of truth. Deployment hardening adds only a minimal Vite 8 manifest/configuration and makes the existing stylesheet/runtime references Vite-safe. Research imagery, favicon, sitemap, robots policy, and route manifest are committed under `public/` so Vite copies them into `dist/`. No marketing copy, layout, animation, color, or responsive behavior is redesigned, and the separate `app.reconbrief.in` application remains untouched.
-
-
-## Deployed visual asset repair
-
-The evidence-network and report-preview images are imported from the source `assets/` directory through the Vite entry module. The HTML keeps relative fallback sources and the ambient CSS background uses a relative source path. This makes Vite emit hashed image assets in `dist/assets/` and removes the deployment dependency on manually copied `public/assets/`. Visual design, animation behavior, copy, and layout remain unchanged.
-
-## Responsive optimization pass
-
-Responsive behavior is preserved as a visual refinement rather than a redesign. The implementation contains transformed decorative geometry, introduces a compact header through the tablet breakpoint, wraps the mobile demo stages, and clips horizontal overflow at the document boundary. The approved desktop visual system, content order, animation language, and typography remain unchanged.
+- **Design movement:** editorial business intelligence journal with restrained instrument-panel details (probability 0.06).
+- **Core principles:** evidence first, calm hierarchy, readable density, and clear availability states.
+- **Color philosophy:** preserve the deep ink background and blue/mint accents so research feels analytical and trustworthy without looking clinical.
+- **Layout paradigm:** a report-led editorial column with a slim sticky contents rail and horizontal overflow only where tables require it.
+- **Signature elements:** numbered section markers, evidence chips/links, and fine-line table rules.
+- **Interaction philosophy:** only verified destinations are clickable; Coming Soon categories communicate future scope without fake actions.
+- **Animation:** reuse existing reveal behavior; no decorative motion is necessary for report content and reduced-motion behavior remains respected.
+- **Typography system:** existing Newsreader display serif for report headings, DM Sans for readable body copy, and DM Mono for evidence/meta labels.
+- **Brand essence:** evidence-backed research intelligence for people making consequential decisions; measured, transparent, useful.
+- **Brand voice:** precise, calm, and candid. Example lines: “Explore the evidence behind the conclusion.” “A sample report, formatted for scrutiny.”
+- **Signature brand color:** the existing Recon Brief blue accent.

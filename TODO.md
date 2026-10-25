@@ -1,29 +1,12 @@
 
 
-## October 2026 social sharing metadata and llms.txt implementation
+## October 2026 Samples experience
 
-- [x] Repair the Competitor Analysis social-image publication path through the existing public-asset build flow while preserving the 1200 × 630 PNG and existing absolute metadata URL.
-- [x] Create and include page-specific 1200 × 630 PNG social cards for the homepage, About, How It Works, AI Market Research, and Research Methodology; reuse the existing Competitor Analysis card unchanged.
-- [x] Add exactly one `og:image` and one `twitter:image` set to each of the six public marketing pages, use `summary_large_image` consistently, preserve existing titles, descriptions, canonicals, Open Graph core metadata, and do not add an unverified `twitter:site` handle.
-- [x] Add concise public `public/llms.txt` documentation with the six marketing-page links and the publicly described Quick Answer, Standard Report, and Deep Analysis options; do not create `llms-full.txt`, change sitemap behavior, change robots.txt, create Trust & Privacy content, or touch the application.
-- [x] Validate the documented build, generated HTML, metadata uniqueness, image dimensions and MIME types, dist inclusion, llms.txt output, and Vite-served extensionless routes locally without deploying.
-
-
-## October 2026 Trust & Privacy page
-
-- [x] Add a dedicated `/trust-and-privacy` page in the existing static marketing-site architecture, using the current Recon Brief header, footer, typography, colors, spacing, responsive behavior, and native disclosure patterns.
-- [x] Include the approved Trust & Privacy disclosures for accounts, stored data, uploaded files, data handlers, device-side data, protections, report honesty, and contact, with the implementation date shown as October 24, 2026.
-- [ ] Keep unresolved publication details visibly marked: the Supabase project region and verified provider data-handling terms remain placeholders because the available static project does not contain the authenticated application configuration or authoritative provider-term review.
-- [ ] Preserve the approved account-deletion wording as supplied, but clearly state that this static marketing project cannot verify the Settings → Delete your account flow, individual report deletion, file-processing behavior, usage counters, browser retention, or security implementation.
-- [ ] Report the discovered discrepancy: the existing marketing pages include Google Analytics 4, which conflicts with the supplied “We use no analytics, advertising or tracking tools” disclosure; do not remove or add tracking as part of this page task.
-- [x] Link the page through the existing header/footer Trust & Privacy links, add the route to `manus-routes.json`, and allow the existing sitemap build to include its canonical URL.
-- [x] Run the existing build and route/content checks without deploying or changing the research engine, authentication, database schema, account-deletion behavior, or unrelated application functionality.
-
-
-## October 2026 public-release cleanup
-
-- [x] Remove the visible IMPORTANT BEFORE PUBLICATION warning, publication-review status, and internal discrepancy notes from the public Trust & Privacy page.
-- [x] Keep the existing premium layout, typography, colors, sections, table of contents, and responsive behavior unchanged.
-- [x] Verify the existing Google Analytics 4 implementation on the public marketing pages and disclose its current use on the public Trust & Privacy page instead of claiming that the site uses no analytics or tracking.
-- [x] Move unresolved Supabase, provider-term, authenticated account-deletion, and application-level verification notes to `TRUST-PRIVACY-REVIEW.md`, outside the public route and public assets.
-- [ ] Confirm application-level claims against the authenticated application before making more specific regional, retention, deletion, training, or security statements.
+- [x] Add a Samples link to the existing desktop and mobile website header and the existing footer, with both pointing to `/samples` and without changing unrelated navigation behavior.
+- [x] Create `/samples` with five distinct categories: Company Research, Market Research, Competitive Intelligence, Academic Research, and Custom Research. Company Research must be Available and clickable; the other four must be clearly marked Coming Soon, must not open the Company Research report, and must not use fake report pages or misleading controls.
+- [x] Create the public report route `/samples/company-research/the-whole-truth-foods` and make it directly accessible, shareable, and linked from the Company Research card.
+- [x] Render the complete attached Whole Truth Foods report in its original order and content, including the opening summary, all required headings, paragraphs, lists, evidence references, interpretations, research gaps, Evidence Check findings, and all E1–E12 Evidence Registry entries.
+- [x] Render Company Snapshot, Financial & Operating Performance, and Evidence Registry as semantic HTML tables with every original column, row, value, period, definition, source ID, and classification preserved. Tables must remain selectable text and use controlled horizontal scrolling on mobile.
+- [x] Add report metadata identifying Company Research, The Whole Truth Foods, Company Research Report, Standard Analysis, and 12 sources without inventing an author, publication date, verification badge, or source URL.
+- [x] Preserve the existing Recon Brief design system, public static architecture, authentication/application boundaries, unrelated routes, research engine, and existing functionality. Do not add dependencies or backend/database changes.
+- [x] Validate navigation, direct routes, canonical metadata, sitemap inclusion, table integrity, absence of raw Markdown table syntax, complete section order, E1–E12 presence, responsive desktop/mobile rendering, and the existing build.

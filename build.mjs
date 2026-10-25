@@ -1,5 +1,5 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, relative, resolve, sep } from 'node:path';
+import { basename, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)));
@@ -47,7 +47,9 @@ function routeForBuiltHtml(relativePath) {
   if (webPath === 'index.html') return '/';
   if (webPath.endsWith('/index.html')) return `/${webPath.slice(0, -'/index.html'.length)}`;
   if (!webPath.toLowerCase().endsWith('.html')) return null;
-  return `/${webPath.slice(0, -'.html'.length)}`;
+  const stem = webPath.slice(0, -'.html'.length);
+  const parent = dirname(stem).split(sep).join('/');
+  return basename(stem) === basename(parent) ? `/${parent}` : `/${stem}`;
 }
 
 function routeIsExcluded(pathname, relativePath) {
@@ -91,6 +93,18 @@ async function listHtmlFiles(directory) {
     if (entry.name.startsWith('.')) continue;
     const absolutePath = resolve(directory, entry.name);
     if (entry.isDirectory()) files.push(...await listHtmlFiles(absolutePath));
+    else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) files.push(absolutePath);
+  }
+  return files;
+}
+
+async function listSourceHtmlFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    if (entry.name.startsWith('.') || ['node_modules', 'dist'].includes(entry.name)) continue;
+    const absolutePath = resolve(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await listSourceHtmlFiles(absolutePath));
     else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) files.push(absolutePath);
   }
   return files;
@@ -196,11 +210,9 @@ async function generateSitemap() {
 }
 
 async function buildLegacyStaticSite() {
-  const rootEntries = await readdir(projectRoot, { withFileTypes: true });
-  const htmlPages = rootEntries
-    .filter((entry) => entry.isFile())
-    .map((entry) => entry.name)
-    .filter((name) => name.toLowerCase().endsWith('.html'))
+  const htmlFiles = await listSourceHtmlFiles(projectRoot);
+  const htmlPages = htmlFiles
+    .map((file) => relative(projectRoot, file).split(sep).join('/'))
     .filter((name) => name.toLowerCase() !== 'index.html.html')
     .filter((name) => !excludedNamePattern.test(name));
 
@@ -211,7 +223,11 @@ async function buildLegacyStaticSite() {
   await rm(outputRoot, { recursive: true, force: true });
   await mkdir(outputRoot, { recursive: true });
   await Promise.all([
-    ...htmlPages.map((name) => cp(resolve(projectRoot, name), resolve(outputRoot, name))),
+    ...htmlPages.map(async (name) => {
+      const destination = resolve(outputRoot, name);
+      await mkdir(dirname(destination), { recursive: true });
+      await cp(resolve(projectRoot, name), destination);
+    }),
     cp(resolve(projectRoot, 'styles.css'), resolve(outputRoot, 'styles.css')),
     cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js')),
     cp(resolve(projectRoot, 'public'), outputRoot, { recursive: true }),
