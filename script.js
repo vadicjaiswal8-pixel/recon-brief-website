@@ -92,3 +92,53 @@ document.querySelectorAll('details[data-footer-explore]').forEach(item=>{
   syncExpanded();
   item.addEventListener('toggle',syncExpanded);
 });
+
+// Inline Company Research sample viewer. It reuses the canonical report HTML artifact
+// so the Samples page and the shareable report never drift into separate report copies.
+const inlineReportViewer=document.querySelector('[data-inline-report-viewer]');
+const inlineReportContent=inlineReportViewer?.querySelector('[data-inline-report-content]');
+const inlineReportStatus=inlineReportViewer?.querySelector('[data-inline-report-status]');
+const inlineReportToggles=document.querySelectorAll('[data-inline-report-toggle]');
+const inlineReportClose=inlineReportViewer?.querySelector('[data-inline-report-close]');
+let inlineReportLoaded=false;
+let inlineReportLoading;
+function setInlineReportState(open){
+  if(!inlineReportViewer)return;
+  inlineReportViewer.hidden=!open;
+  inlineReportToggles.forEach(button=>button.setAttribute('aria-expanded',String(open)));
+  if(open){
+    inlineReportViewer.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  }
+}
+async function loadInlineReport(){
+  if(inlineReportLoaded)return;
+  if(inlineReportLoading)return inlineReportLoading;
+  inlineReportLoading=fetch('/samples-company-research-the-whole-truth-foods.html',{credentials:'same-origin'})
+    .then(response=>{if(!response.ok)throw new Error('Report request failed with '+response.status);return response.text()})
+    .then(markup=>{
+      const parsed=new DOMParser().parseFromString(markup,'text/html');
+      const sourceBody=parsed.body;
+      sourceBody.querySelectorAll('.site-noise,.site-header,.site-footer,script').forEach(node=>node.remove());
+      if(!inlineReportContent)throw new Error('Inline report container is missing');
+      inlineReportContent.replaceChildren(...Array.from(sourceBody.children));
+      inlineReportContent.querySelectorAll('.reveal').forEach(node=>node.classList.add('is-visible'));
+      inlineReportLoaded=true;
+      if(inlineReportStatus)inlineReportStatus.hidden=true;
+    })
+    .catch(error=>{
+      if(inlineReportStatus){inlineReportStatus.hidden=false;inlineReportStatus.textContent='The sample report could not be loaded. Please try again.'}
+      console.error('Inline Company Research report failed to load',error);
+      throw error;
+    });
+  return inlineReportLoading;
+}
+inlineReportToggles.forEach(button=>button.addEventListener('click',async()=>{
+  const opening=inlineReportViewer?.hidden!==false;
+  if(!opening){setInlineReportState(false);button.focus();return}
+  setInlineReportState(true);
+  try{await loadInlineReport()}catch{}
+}));
+inlineReportClose?.addEventListener('click',()=>{
+  setInlineReportState(false);
+  inlineReportToggles[0]?.focus();
+});

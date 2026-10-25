@@ -17,3 +17,11 @@
 - [x] Move the complete report into a guaranteed root-level static build artifact and add exact Vercel rewrites for the clean report URL and trailing-slash variant; do not add a broad SPA rewrite.
 - [x] Rebuild and verify the report artifact, 3 semantic tables, 13 report sections, Evidence Registry, canonical sitemap URL, and exact rewrite targets.
 - [ ] Redeploy through the user’s Vercel account and verify the live URL; this remains open because this workspace has no Vercel authentication.
+
+## October 2026 inline Samples fallback
+
+- [x] Keep the existing separate report artifact and route configuration, but make both Company Research controls open the complete report inline on `/samples` so the visitor does not depend on the broken production route.
+- [x] Reuse the canonical report HTML artifact through same-origin fetch; remove only its outer header, footer, noise layer, and script before injecting the report body, avoiding a second report copy.
+- [x] Add collapse/reopen behavior, accessible button state, loading/error status, focus return, restrained expansion styling, and responsive containment.
+- [x] Verify with Chromium at 1280px and 390px: URL remains `/samples`, open/collapse/reopen works, 3 tables and 13 sections remain present, no horizontal overflow occurs, and no console exceptions are emitted.
+- [ ] Verify the change on the live production domain after deployment; this remains blocked by missing Vercel authentication in the current session.
