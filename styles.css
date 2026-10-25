@@ -318,3 +318,4 @@ html,body{overflow-x:clip}
   .samples-page .page-hero-art{height:270px;min-height:0}
   .inline-report-content .evidence-inline,.inline-report-content .evidence-ref,.evidence-inline,.evidence-ref{white-space:normal}
 }
+.evidence-source-link{color:var(--blue);text-decoration:none;text-decoration-thickness:1px;text-underline-offset:3px}.evidence-source-link:hover,.evidence-source-link:focus-visible{color:var(--paper);text-decoration:underline}.evidence-source-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px}

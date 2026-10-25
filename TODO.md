@@ -44,3 +44,11 @@
 - [x] Allow evidence-reference groups to wrap naturally while keeping each semantic table in its own touch-scroll container.
 - [x] Verify 360px, 390px, and 430px mobile renders plus 1280px desktop: title, paragraphs, metric cards, section headings, table containers, TOC disclosure, category cards, and interactions remain usable; no console exceptions were emitted.
 - [ ] Verify the final mobile fix on live production after deployment; the live site still serves the previous build and this session has no Vercel credentials.
+
+## October 2026 Evidence Registry source links
+
+- [x] Verify the original public source destinations independently before editing the report; use only canonical source pages and preserve the original registry titles, IDs, and classifications.
+- [x] Add safe new-tab links for E1–E7 and E9–E12 with `target="_blank"` and `rel="noopener noreferrer"`, plus Recon Brief blue hover/focus styling.
+- [x] Leave E8 (StartupDissect) as plain text because the original page could not be opened or canonically verified; do not fabricate a replacement URL.
+- [x] Verify the rendered registry contains 11 external source links, one plain-text E8 entry, preserved 3-column table structure, and source-link attributes; verify the E3 link resolves to the official Whole Truth Foods domain and browser attributes are correct.
+- [ ] Verify the updated links on the live deployed report after deployment; production currently serves the prior build.
