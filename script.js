@@ -122,6 +122,7 @@ async function loadInlineReport(){
       if(!inlineReportContent)throw new Error('Inline report container is missing');
       inlineReportContent.replaceChildren(...Array.from(sourceBody.children));
       inlineReportContent.querySelectorAll('.reveal').forEach(node=>node.classList.add('is-visible'));
+      prepareReportToc(inlineReportContent);
       inlineReportLoaded=true;
       if(inlineReportStatus)inlineReportStatus.hidden=true;
     })
@@ -142,3 +143,18 @@ inlineReportClose?.addEventListener('click',()=>{
   setInlineReportState(false);
   inlineReportToggles[0]?.focus();
 });
+
+function prepareReportToc(root=document){
+  root.querySelectorAll('.report-toc').forEach(toc=>{
+    if(toc.parentElement?.matches('details.report-toc-disclosure'))return;
+    const details=document.createElement('details');
+    details.className='report-toc-disclosure';
+    details.open=matchMedia('(min-width: 741px)').matches;
+    const summary=document.createElement('summary');
+    summary.innerHTML='<span>IN THIS REPORT</span><span aria-hidden="true">⌄</span>';
+    details.append(summary);
+    toc.parentNode.insertBefore(details,toc);
+    details.append(toc);
+  });
+}
+prepareReportToc();

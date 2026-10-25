@@ -25,3 +25,22 @@
 - [x] Add collapse/reopen behavior, accessible button state, loading/error status, focus return, restrained expansion styling, and responsive containment.
 - [x] Verify with Chromium at 1280px and 390px: URL remains `/samples`, open/collapse/reopen works, 3 tables and 13 sections remain present, no horizontal overflow occurs, and no console exceptions are emitted.
 - [ ] Verify the change on the live production domain after deployment; this remains blocked by missing Vercel authentication in the current session.
+
+## October 2026 report presentation correction
+
+- [x] Confirm the deployed defect with browser measurements: the live inline viewer was nested inside `.samples-grid`, producing a 553px report layout and 242px main document column at desktop; the corrected sibling layout measures 1217px and 911px locally.
+- [x] Remove the duplicate inline viewer title so the report cover is the only report title and retains the category label, metadata, source count, overview, and decorative panel.
+- [x] Give the report viewer the full section-shell width, use a compact 210px desktop TOC sidebar with a dominant main column, and remove nested section-shell width compounding.
+- [x] Scope the Evidence Registry minimum width to its table instead of its section, preserving intentional mobile table scrolling without widening the page.
+- [x] Add a native mobile “In this report” disclosure while preserving the desktop sidebar and section links.
+- [x] Verify desktop/mobile rendered layout, single title, 3 tables, 13 sections, table widths, no horizontal page overflow, inline behavior, and zero console exceptions in Chromium.
+- [ ] Verify the final visual fix on live production after deployment; the live site currently still serves the pre-fix layout and this session has no Vercel credentials.
+
+## October 2026 mobile responsiveness correction
+
+- [x] Correct the Samples mobile decorative-panel selector and reduce its mobile height/stack offsets so all five report-type labels remain inside the panel at 360px, 390px, and 430px.
+- [x] Keep the Samples hero button, supporting copy, and next section within the viewport without page-level horizontal overflow.
+- [x] Make report opening summary text readable on mobile, keep the report title and metadata within the content width, stack financial metric cards into natural-height single-column cards, and reduce mobile section-heading scale.
+- [x] Allow evidence-reference groups to wrap naturally while keeping each semantic table in its own touch-scroll container.
+- [x] Verify 360px, 390px, and 430px mobile renders plus 1280px desktop: title, paragraphs, metric cards, section headings, table containers, TOC disclosure, category cards, and interactions remain usable; no console exceptions were emitted.
+- [ ] Verify the final mobile fix on live production after deployment; the live site still serves the previous build and this session has no Vercel credentials.
