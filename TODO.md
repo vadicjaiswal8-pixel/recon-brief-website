@@ -75,3 +75,10 @@
 - [x] Add a responsive direct embedded demo player to How It Works after the introductory workflow explanation, using the same MP4 exactly once from the shared public asset path.
 - [x] Refine the actual `.hero-primary-cta` and `.hero-secondary-cta` selectors so the homepage CTA pair has visibly distinct final computed styles at desktop and mobile sizes.
 - [x] Verify the MP4 response, browser decode/play/pause/seek behavior, modal close/focus behavior, How It Works embedded player, build output, and unaffected public pages.
+
+## Autoplay, loop, and viewport playback refinement
+
+- [x] Start the existing silent MP4 automatically from the homepage Watch demo user action, muted and looped, while retaining native controls and a graceful manual-play fallback.
+- [x] Stop and reset the modal player when it closes, releasing its active playback/buffer state without removing the shared asset.
+- [x] Autoplay the same muted, looped MP4 when the How It Works player is visible, pause it when it leaves the viewport, and skip automatic motion when reduced-motion is requested.
+- [x] Verify the asset path, production inclusion, HTTP range/MIME response, browser playback, pause, seek, responsive layout, CTA computed styles, and absence of video console errors.

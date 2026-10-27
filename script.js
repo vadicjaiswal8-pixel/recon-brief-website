@@ -81,6 +81,8 @@ const demoModal=document.querySelector('[data-demo-modal]');
 const demoModalOpen=document.querySelector('[data-demo-modal-open]');
 const demoModalCloseButtons=demoModal?.querySelectorAll('[data-demo-modal-close]')||[];
 const demoVideo=demoModal?.querySelector('[data-demo-video]');
+const inlineDemoVideo=document.querySelector('.how-demo-video');
+const reducedMotionQuery=matchMedia('(prefers-reduced-motion: reduce)');
 let demoModalReturnFocus=null;
 function demoModalFocusable(){
   return [...(demoModal?.querySelectorAll('button,[href],input,select,textarea,video,[tabindex]:not([tabindex="-1"])')||[])].filter(element=>!element.disabled&&element.offsetParent!==null);
@@ -92,14 +94,19 @@ function openDemoModal(){
   document.body.classList.add('demo-modal-open');
   if(demoVideo){
     demoVideo.muted=true;
+    demoVideo.loop=true;
     demoVideo.load();
-    demoVideo.play().catch(()=>{});
+    if(!reducedMotionQuery.matches)demoVideo.play().catch(()=>{});
   }
   demoModal.querySelector('.demo-modal-close')?.focus();
 }
 function closeDemoModal(){
   if(!demoModal||demoModal.hidden)return;
-  demoVideo?.pause();
+  if(demoVideo){
+    demoVideo.pause();
+    demoVideo.currentTime=0;
+    demoVideo.load();
+  }
   demoModal.hidden=true;
   document.body.classList.remove('demo-modal-open');
   demoModalReturnFocus?.focus?.();
@@ -120,6 +127,20 @@ document.addEventListener('keydown',event=>{
   if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
   else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
 });
+
+
+// Autoplay the direct How It Works demo only while it is visible.
+if(inlineDemoVideo){
+  inlineDemoVideo.muted=true;
+  inlineDemoVideo.loop=true;
+  const syncInlineDemoPlayback=entries=>{
+    const visible=entries.some(entry=>entry.isIntersecting);
+    if(visible&&!reducedMotionQuery.matches)inlineDemoVideo.play().catch(()=>{});
+    else inlineDemoVideo.pause();
+  };
+  const inlineDemoObserver=new IntersectionObserver(syncInlineDemoPlayback,{threshold:.35});
+  inlineDemoObserver.observe(inlineDemoVideo);
+}
 
 
 // Keep the native disclosure state reflected for assistive technologies.

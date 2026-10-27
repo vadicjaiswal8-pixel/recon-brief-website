@@ -360,3 +360,23 @@ body.demo-modal-open{overflow:hidden}
 .hero-actions .hero-secondary-cta:hover,.hero-actions .hero-secondary-cta:focus-visible{border-color:var(--blue);background:linear-gradient(180deg,rgba(38,82,104,.62),rgba(10,24,32,.8));box-shadow:inset 0 1px 0 rgba(191,224,238,.12),0 9px 20px rgba(40,111,151,.13)}
 @media(max-width:740px){.how-demo-section{padding-top:76px;padding-bottom:76px}.how-demo-player{margin-top:28px}.how-demo-caption{font-size:9px}.hero-actions .hero-primary-cta,.hero-actions .hero-secondary-cta{min-height:52px}}
 
+
+/* Keep the header app CTA visually aligned with the homepage primary action. */
+.header-actions .button-small,
+.mobile-nav .button {
+  border:1px solid rgba(185,226,248,.78);
+  border-radius:1px;
+  background:linear-gradient(180deg,#8bcff1 0%,#60aedd 100%);
+  color:#061018;
+  font-weight:600;
+  letter-spacing:.02em;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 7px 18px rgba(40,111,151,.13);
+}
+.header-actions .button-small:hover,
+.header-actions .button-small:focus-visible,
+.mobile-nav .button:hover,
+.mobile-nav .button:focus-visible {
+  border-color:#d5effc;
+  background:linear-gradient(180deg,#a1dcf7 0%,#6bb8e5 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 10px 22px rgba(40,111,151,.2);
+}
