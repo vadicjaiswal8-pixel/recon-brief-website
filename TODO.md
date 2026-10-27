@@ -67,3 +67,11 @@
 - [x] Refine the two hero CTA buttons as a cohesive premium pair using the existing dark editorial palette, with the primary visually dominant and the secondary dark/transparent with a thin blue border and play icon.
 - [x] Preserve the current header, hero layout, animation system, typography, Samples page, Trust & Privacy page, report engine, APIs, authentication, routing, and unrelated SEO metadata.
 - [x] Verify the homepage build, CTA destinations/behavior, modal playback controls, desktop/mobile layout, and production inclusion of the provided video asset.
+
+## Playback fix and How It Works demo
+
+- [x] Fix the existing silent product demo modal so the provided MP4 visibly starts from the Watch demo user action, while retaining native controls and the existing modal heading/design.
+- [x] Add a poster frame derived from the provided MP4 so the player does not appear as an empty dark rectangle before playback.
+- [x] Add a responsive direct embedded demo player to How It Works after the introductory workflow explanation, using the same MP4 exactly once from the shared public asset path.
+- [x] Refine the actual `.hero-primary-cta` and `.hero-secondary-cta` selectors so the homepage CTA pair has visibly distinct final computed styles at desktop and mobile sizes.
+- [x] Verify the MP4 response, browser decode/play/pause/seek behavior, modal close/focus behavior, How It Works embedded player, build output, and unaffected public pages.

@@ -90,7 +90,11 @@ function openDemoModal(){
   demoModalReturnFocus=document.activeElement;
   demoModal.hidden=false;
   document.body.classList.add('demo-modal-open');
-  demoVideo?.load();
+  if(demoVideo){
+    demoVideo.muted=true;
+    demoVideo.load();
+    demoVideo.play().catch(()=>{});
+  }
   demoModal.querySelector('.demo-modal-close')?.focus();
 }
 function closeDemoModal(){

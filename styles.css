@@ -348,3 +348,15 @@ body.demo-modal-open{overflow:hidden}
 @media(max-width:740px){.hero-actions{align-items:stretch;gap:10px}.hero-actions .button{min-width:0;flex:1 1 190px}.demo-modal{padding:12px}.demo-modal-panel{padding:18px}.demo-modal-header{gap:12px;margin-bottom:16px}.demo-modal-header h2{font-size:34px}.demo-modal-close{width:36px;height:36px;font-size:24px}.demo-modal-description{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.demo-modal-backdrop,.demo-modal-panel{animation:none}.hero-actions .hero-primary-cta span{transition:none}}
 
+/* Direct How It Works demo player. */
+.how-demo-section{padding-top:112px;padding-bottom:112px}
+.how-demo-player{margin-top:38px;max-width:980px}
+.how-demo-video-frame{position:relative;overflow:hidden;aspect-ratio:16/9;border:1px solid var(--line-strong);background:#03090d;box-shadow:0 18px 45px rgba(0,0,0,.22)}
+.how-demo-video{display:block;width:100%;height:100%;object-fit:contain;background:#03090d}
+.how-demo-caption{margin:15px 0 0;color:var(--faint);font:10px/1.6 var(--mono);letter-spacing:.02em}
+.hero-actions .hero-primary-cta{min-height:54px;padding:0 22px;border:1px solid rgba(185,226,248,.78);border-radius:1px;background:linear-gradient(180deg,#8bcff1 0%,#60aedd 100%);color:#061018;font-size:11px;font-weight:600;letter-spacing:.035em;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 20px rgba(40,111,151,.16)}
+.hero-actions .hero-secondary-cta{min-height:54px;padding:0 20px;border:1px solid rgba(100,181,232,.7);border-radius:1px;background:linear-gradient(180deg,rgba(25,57,73,.48),rgba(8,17,23,.55));color:var(--paper);font-size:11px;font-weight:500;letter-spacing:.035em;box-shadow:inset 0 1px 0 rgba(191,224,238,.08)}
+.hero-actions .hero-primary-cta:hover,.hero-actions .hero-primary-cta:focus-visible{border-color:#d5effc;background:linear-gradient(180deg,#a1dcf7 0%,#6bb8e5 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 11px 25px rgba(40,111,151,.24)}
+.hero-actions .hero-secondary-cta:hover,.hero-actions .hero-secondary-cta:focus-visible{border-color:var(--blue);background:linear-gradient(180deg,rgba(38,82,104,.62),rgba(10,24,32,.8));box-shadow:inset 0 1px 0 rgba(191,224,238,.12),0 9px 20px rgba(40,111,151,.13)}
+@media(max-width:740px){.how-demo-section{padding-top:76px;padding-bottom:76px}.how-demo-player{margin-top:28px}.how-demo-caption{font-size:9px}.hero-actions .hero-primary-cta,.hero-actions .hero-secondary-cta{min-height:52px}}
+
