@@ -82,3 +82,10 @@
 - [x] Stop and reset the modal player when it closes, releasing its active playback/buffer state without removing the shared asset.
 - [x] Autoplay the same muted, looped MP4 when the How It Works player is visible, pause it when it leaves the viewport, and skip automatic motion when reduced-motion is requested.
 - [x] Verify the asset path, production inclusion, HTTP range/MIME response, browser playback, pause, seek, responsive layout, CTA computed styles, and absence of video console errors.
+
+## Remove temporary video features
+
+- [x] Remove the homepage Watch demo CTA, modal markup, and video-specific runtime handlers without replacing it with a placeholder; keep Try a sample brief and its `#demo` destination.
+- [x] Remove the How It Works embedded video section, heading, description, and player-specific spacing while preserving the research workflow content.
+- [x] Remove unused video-specific CSS and retain the original MP4 and poster assets for a future dedicated Videos page.
+- [x] Verify production build, desktop/mobile layout, surviving CTA behavior, absence of video UI, and clean browser console output.
