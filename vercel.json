@@ -2,14 +2,16 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/samples/company-research/the-whole-truth-foods",
-      "destination": "/samples-company-research-the-whole-truth-foods.html"
+      "destination": "/samples",
+      "permanent": true
     },
     {
       "source": "/samples/company-research/the-whole-truth-foods/",
-      "destination": "/samples-company-research-the-whole-truth-foods.html"
+      "destination": "/samples",
+      "permanent": true
     }
   ]
 }

@@ -52,3 +52,10 @@
 - [x] Leave E8 (StartupDissect) as plain text because the original page could not be opened or canonically verified; do not fabricate a replacement URL.
 - [x] Verify the rendered registry contains 11 external source links, one plain-text E8 entry, preserved 3-column table structure, and source-link attributes; verify the E3 link resolves to the official Whole Truth Foods domain and browser attributes are correct.
 - [ ] Verify the updated links on the live deployed report after deployment; production currently serves the prior build.
+
+## October 2026 obsolete sample URL redirect
+
+- [x] Replace the broken Whole Truth Foods report rewrites with permanent Vercel redirects from the old report URL (with and without a trailing slash) to `/samples`.
+- [x] Preserve `samples-company-research-the-whole-truth-foods.html` because the inline Samples viewer fetches it directly as `/samples-company-research-the-whole-truth-foods.html`.
+- [x] Remove the redirected old page path from `manus-routes.json`; the existing build excludes redirect sources from the generated sitemap.
+- [ ] Deploy through the existing GitHub/Vercel workflow and verify the live 301 response.
