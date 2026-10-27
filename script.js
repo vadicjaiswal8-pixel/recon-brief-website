@@ -76,6 +76,48 @@ demoForm?.addEventListener('submit',event=>{event.preventDefault();runDemo()});
 document.querySelectorAll('[data-question]').forEach(button=>button.addEventListener('click',()=>{if(demoQuestion){demoQuestion.value=button.dataset.question;demoQuestion.focus()}}));
 
 
+// Accessible, lazy-loaded product demo modal.
+const demoModal=document.querySelector('[data-demo-modal]');
+const demoModalOpen=document.querySelector('[data-demo-modal-open]');
+const demoModalCloseButtons=demoModal?.querySelectorAll('[data-demo-modal-close]')||[];
+const demoVideo=demoModal?.querySelector('[data-demo-video]');
+let demoModalReturnFocus=null;
+function demoModalFocusable(){
+  return [...(demoModal?.querySelectorAll('button,[href],input,select,textarea,video,[tabindex]:not([tabindex="-1"])')||[])].filter(element=>!element.disabled&&element.offsetParent!==null);
+}
+function openDemoModal(){
+  if(!demoModal)return;
+  demoModalReturnFocus=document.activeElement;
+  demoModal.hidden=false;
+  document.body.classList.add('demo-modal-open');
+  demoVideo?.load();
+  demoModal.querySelector('.demo-modal-close')?.focus();
+}
+function closeDemoModal(){
+  if(!demoModal||demoModal.hidden)return;
+  demoVideo?.pause();
+  demoModal.hidden=true;
+  document.body.classList.remove('demo-modal-open');
+  demoModalReturnFocus?.focus?.();
+}
+demoModalOpen?.addEventListener('click',openDemoModal);
+demoModalCloseButtons.forEach(button=>button.addEventListener('click',event=>{
+  if(event.currentTarget===event.target||event.currentTarget.matches('.demo-modal-close'))closeDemoModal();
+}));
+demoModal?.addEventListener('click',event=>{if(event.target===demoModal)closeDemoModal()});
+document.addEventListener('keydown',event=>{
+  if(!demoModal||demoModal.hidden)return;
+  if(event.key==='Escape'){event.preventDefault();closeDemoModal();return}
+  if(event.key!=='Tab')return;
+  const focusable=demoModalFocusable();
+  if(!focusable.length)return;
+  const first=focusable[0];
+  const last=focusable[focusable.length-1];
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
+
+
 // Keep the native disclosure state reflected for assistive technologies.
 document.querySelectorAll('details[data-faq]').forEach(item=>{
   const summary=item.querySelector('summary');

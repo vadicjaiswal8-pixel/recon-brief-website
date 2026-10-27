@@ -319,3 +319,32 @@ html,body{overflow-x:clip}
   .inline-report-content .evidence-inline,.inline-report-content .evidence-ref,.evidence-inline,.evidence-ref{white-space:normal}
 }
 .evidence-source-link{color:var(--blue);text-decoration:none;text-decoration-thickness:1px;text-underline-offset:3px}.evidence-source-link:hover,.evidence-source-link:focus-visible{color:var(--paper);text-decoration:underline}.evidence-source-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* Homepage product demo CTA pair and accessible modal. */
+.hero-actions .hero-primary-cta{min-height:52px;padding:0 19px;border-color:#82c8ef;background:linear-gradient(135deg,#79c1eb,#5ca9d9);color:#071018;letter-spacing:.01em;box-shadow:0 10px 24px rgba(53,132,180,.12)}
+.hero-actions .hero-primary-cta:hover,.hero-actions .hero-primary-cta:focus-visible{border-color:#b4e2fb;background:linear-gradient(135deg,#8dd0f3,#66b3e1);box-shadow:0 14px 30px rgba(53,132,180,.22)}
+.hero-actions .hero-primary-cta span{font-size:20px;line-height:1;transition:transform .25s var(--ease)}
+.hero-actions .hero-primary-cta:hover span,.hero-actions .hero-primary-cta:focus-visible span{transform:translateX(3px)}
+.hero-actions .hero-secondary-cta{min-height:52px;padding:0 18px;border-color:rgba(100,181,232,.62);background:rgba(8,17,23,.38);color:var(--paper);font-weight:500;letter-spacing:.01em}
+.hero-actions .hero-secondary-cta:hover,.hero-actions .hero-secondary-cta:focus-visible{border-color:var(--blue);background:rgba(100,181,232,.1);box-shadow:0 10px 24px rgba(53,132,180,.12)}
+.button-play{display:inline-grid;place-items:center;width:17px;height:17px;color:var(--blue);font-size:9px!important;line-height:1;transform:translateX(1px)}
+.hero-actions .button:focus-visible,.demo-modal button:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+body.demo-modal-open{overflow:hidden}
+.demo-modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:clamp(16px,4vw,48px);overflow-y:auto}
+.demo-modal[hidden]{display:none}
+.demo-modal-backdrop{position:absolute;inset:0;background:rgba(2,8,12,.82);backdrop-filter:blur(12px);animation:demo-modal-fade .25s ease both}
+.demo-modal-panel{position:relative;z-index:1;width:min(100%,980px);padding:clamp(20px,3vw,34px);border:1px solid rgba(100,181,232,.38);background:linear-gradient(145deg,rgba(16,40,54,.98),rgba(7,17,23,.98));box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 70px rgba(50,135,185,.12);animation:demo-modal-rise .35s var(--ease) both}
+.demo-modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:22px}
+.demo-modal-header .eyebrow{font-size:9px}
+.demo-modal-header h2{margin:13px 0 0;color:var(--paper);font:500 clamp(30px,4vw,48px)/.96 var(--serif);letter-spacing:-.055em}
+.demo-modal-header h2 em{color:var(--blue);font-style:italic}
+.demo-modal-close{flex:0 0 auto;width:40px;height:40px;border:1px solid var(--line-strong);background:rgba(8,17,23,.5);color:var(--blue);cursor:pointer;font:300 27px/1 var(--sans);transition:border-color .25s,background .25s,color .25s}
+.demo-modal-close:hover{border-color:var(--blue);background:var(--blue-wash);color:var(--paper)}
+.demo-modal-video-frame{position:relative;overflow:hidden;border:1px solid var(--line);background:#03090d;aspect-ratio:16/9;box-shadow:0 12px 35px rgba(0,0,0,.24)}
+.demo-modal-video{display:block;width:100%;height:100%;object-fit:contain;background:#03090d}
+.demo-modal-description{margin:16px 0 0;color:var(--muted);font:11px/1.65 var(--mono)}
+@keyframes demo-modal-fade{from{opacity:0}to{opacity:1}}
+@keyframes demo-modal-rise{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+@media(max-width:740px){.hero-actions{align-items:stretch;gap:10px}.hero-actions .button{min-width:0;flex:1 1 190px}.demo-modal{padding:12px}.demo-modal-panel{padding:18px}.demo-modal-header{gap:12px;margin-bottom:16px}.demo-modal-header h2{font-size:34px}.demo-modal-close{width:36px;height:36px;font-size:24px}.demo-modal-description{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.demo-modal-backdrop,.demo-modal-panel{animation:none}.hero-actions .hero-primary-cta span{transition:none}}
+

@@ -59,3 +59,11 @@
 - [x] Preserve `samples-company-research-the-whole-truth-foods.html` because the inline Samples viewer fetches it directly as `/samples-company-research-the-whole-truth-foods.html`.
 - [x] Remove the redirected old page path from `manus-routes.json`; the existing build excludes redirect sources from the generated sitemap.
 - [ ] Deploy through the existing GitHub/Vercel workflow and verify the live 301 response.
+
+## Homepage product demo modal and CTA refinement
+
+- [x] Add a secondary `Watch demo` button beside the existing `Try a sample brief` hero CTA without changing the primary destination.
+- [x] Add an accessible dark modal that opens the provided 30-second silent `recon-briefdemowebsite.mp4` asset with native playback controls, volume, fullscreen, Escape/keyboard close behavior, focus restoration, background-scroll locking, responsive sizing, lazy loading, and reduced-motion support.
+- [x] Refine the two hero CTA buttons as a cohesive premium pair using the existing dark editorial palette, with the primary visually dominant and the secondary dark/transparent with a thin blue border and play icon.
+- [x] Preserve the current header, hero layout, animation system, typography, Samples page, Trust & Privacy page, report engine, APIs, authentication, routing, and unrelated SEO metadata.
+- [x] Verify the homepage build, CTA destinations/behavior, modal playback controls, desktop/mobile layout, and production inclusion of the provided video asset.
