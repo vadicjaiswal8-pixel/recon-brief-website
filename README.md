@@ -59,7 +59,7 @@ The production-ready Vite output is written to `dist/` and includes the built HT
 - `manus-routes.json`, `sitemap.xml`, `robots.txt`, `public/sitemap.xml`, and `public/robots.txt` — route discovery and crawler metadata. The generated sitemap is served at the existing `/sitemap.xml` URL from `dist/`.
 - `app.config.ts` — project logo metadata.
 
-The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site; eligible root-level `.html` pages are automatically built and considered for the sitemap. For a future public SEO page, add its HTML file with a self-canonical `https://www.reconbrief.in/<route>` URL and do not mark it `noindex`; no sitemap URL entry needs to be maintained by hand. The separate Recon Brief application is not included in this package. The baseline also lacks `public/assets/evidence-network.png`, although existing homepage CSS references it; this unrelated asset was not changed.
+The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site; eligible root-level `.html` pages are automatically built and considered for the sitemap. For a future public SEO page, add its HTML file with a self-canonical `https://www.reconbrief.in/<route>` URL and do not mark it `noindex`; no sitemap URL entry needs to be maintained by hand. The separate Recon Brief application is not included in this package. The optional homepage evidence-network background reference was removed after confirming that the asset was unavailable; no replacement image was invented or added.
 
 ## Content and trust notes
 

@@ -58,4 +58,4 @@ https://www.reconbrief.in/
 https://www.reconbrief.in/about
 https://www.reconbrief.in/how-it-works
 
-The Trust & Privacy navigation link is deferred and not listed in the sitemap. The baseline asset public/assets/evidence-network.png is missing although existing homepage CSS references it; the Vite build emits a warning and this unrelated asset was not changed.
+The Trust & Privacy navigation link is deferred and not listed in the sitemap. The optional homepage evidence-network background reference was removed after confirming that the asset was unavailable; no replacement image was invented or added.

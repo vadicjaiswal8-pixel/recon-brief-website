@@ -89,3 +89,12 @@
 - [x] Remove the How It Works embedded video section, heading, description, and player-specific spacing while preserving the research workflow content.
 - [x] Remove unused video-specific CSS and retain the original MP4 and poster assets for a future dedicated Videos page.
 - [x] Verify production build, desktop/mobile layout, surviving CTA behavior, absence of video UI, and clean browser console output.
+
+
+## October 2026 approved positioning and Company Research page
+
+- [x] Refine the editable homepage and About page around “Research you can inspect. Intelligence you can act on.” while preserving the existing design, working application destination, report-depth labels, and the five approved research categories.
+- [x] Create the root-level `/company-research` page with approved metadata, structured company-research sections, FAQs, sample links, audience guidance, limitations, and responsive existing styling.
+- [x] Make targeted copy and contextual-link updates on the editable Market Research, Competitor Analysis, and Research Methodology pages without rewriting their educational frameworks.
+- [x] Leave `/samples`, `/how-it-works`, `/trust-and-privacy`, the obsolete React implementation, `index.html.html`, the existing report redirect, and generated `dist/` files untouched.
+- [x] Run the production build and verify the new route, canonical metadata, sitemap inclusion, protected-page hashes, internal links, and responsive rendering.
