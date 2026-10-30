@@ -45,7 +45,7 @@ async function ensureArticleOutput() {
   }
 }
 
-async function ensureBlogIndexOutput() {
+async function ensureBlogOutput() {
   const blogIndexPath = resolve(outputRoot, 'blog/index.html');
   try {
     await readFile(blogIndexPath);
@@ -280,7 +280,7 @@ async function buildLegacyStaticSite() {
     cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js')),
     cp(resolve(projectRoot, 'public'), outputRoot, { recursive: true }),
   ]);
-  await ensureBlogIndexOutput();
+  await ensureBlogOutput();
   await ensureArticleOutput();
   await ensureBlogImagesInOutput();
   await generateSitemap();
@@ -288,7 +288,7 @@ async function buildLegacyStaticSite() {
 }
 
 if (process.argv.includes('--sitemap-only')) {
-  await ensureBlogIndexOutput();
+  await ensureBlogOutput();
   await ensureArticleOutput();
   await ensureBlogImagesInOutput();
   await generateSitemap();
