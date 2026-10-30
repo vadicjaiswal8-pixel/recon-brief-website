@@ -46,36 +46,38 @@ const instrument=document.querySelector('.hero-instrument');
 if(instrument&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(pointer:fine)').matches){instrument.addEventListener('pointermove',event=>{const rect=instrument.getBoundingClientRect();const x=(event.clientX-rect.left)/rect.width-.5;const y=(event.clientY-rect.top)/rect.height-.5;instrument.style.setProperty('--tilt-x',`${x*5}deg`);instrument.style.setProperty('--tilt-y',`${y*-4}deg`)});instrument.addEventListener('pointerleave',()=>{instrument.style.setProperty('--tilt-x','0deg');instrument.style.setProperty('--tilt-y','0deg')})}
 
 
-// Guided sample brief: a deterministic product demonstration for the public site.
+// Sample-report selector for the existing demo. No question is submitted for processing.
 const demoForm=document.getElementById('demo-form');
 const demoQuestion=document.getElementById('demo-question');
 const demoState=document.getElementById('demo-state');
-const demoProgressLine=document.getElementById('demo-progress-line');
-const demoProgressLabel=document.getElementById('demo-progress-label');
-const demoFinding=document.getElementById('demo-finding');
-const demoSupport=document.getElementById('demo-support');
-const demoOutputStatus=document.getElementById('demo-output-status');
-const demoStages=document.querySelectorAll('.demo-stage');
-let demoTimer;
-const demoCopy=[
-  ['The question becomes a brief with a clear point of view.','Recon turns an open question into a focused research frame.'],
-  ['The source field widens without losing the thread.','Relevant material is organized around the question, not left as a pile of tabs.'],
-  ['The claim now has somewhere to point.','Sources, excerpts, and supporting material stay close to the evidence they support.'],
-  ['Signals become patterns, gaps, and implications.','Recon separates what is observed from what is interpreted.'],
-  ['The finding is ready to leave the room.','The finished brief keeps its evidence trail so a team can review and act.']
-];
-function resetDemo(){clearInterval(demoTimer);demoStages.forEach(stage=>stage.classList.remove('active'));demoStages[0]?.classList.add('active');if(demoProgressLine)demoProgressLine.style.width='0%';if(demoProgressLabel)demoProgressLabel.textContent='0 / 5 stages';if(demoState)demoState.textContent='Sample preview ready';if(demoOutputStatus)demoOutputStatus.textContent='Illustrative';if(demoFinding)demoFinding.textContent='The question becomes a brief with a clear point of view.';if(demoSupport)demoSupport.textContent='Recon keeps the source trail close, so the eventual answer is easier to inspect, challenge, and share.'}
-function runDemo(){
-  clearInterval(demoTimer);let step=0;const question=demoQuestion?.value.trim()||'your research question';
-  if(demoState)demoState.textContent='Working on “'+question.slice(0,34)+(question.length>34?'…':'')+'”';
-  if(demoOutputStatus)demoOutputStatus.textContent='Previewing';
-  const advance=()=>{const copy=demoCopy[step];demoStages.forEach((stage,index)=>stage.classList.toggle('active',index===step));if(demoProgressLine)demoProgressLine.style.width=((step+1)*20)+'%';if(demoProgressLabel)demoProgressLabel.textContent=(step+1)+' / 5 stages';if(demoFinding)demoFinding.textContent=copy[0];if(demoSupport)demoSupport.textContent=copy[1];if(step===4){if(demoState)demoState.textContent='Sample path complete';if(demoOutputStatus)demoOutputStatus.textContent='Illustrative';clearInterval(demoTimer)}step+=1};
-  advance();demoTimer=setInterval(advance,850);
+const demoResearchType=document.getElementById('demo-research-type');
+const demoSampleFeedback=document.querySelector('[data-demo-sample-feedback]');
+const demoViewSample=document.querySelector('[data-view-sample]');
+const demoSampleDestinations={
+  'Company Research':'/samples',
+  'Market Research':null,
+  'Competitive Intelligence':null,
+  'Academic Research':null,
+  'Custom Research':null
+};
+function updateDemoSampleAvailability(){
+  if(!demoResearchType||!demoSampleFeedback)return;
+  const available=Boolean(demoSampleDestinations[demoResearchType.value]);
+  const message=available?'Company Research sample available.':'Coming soon — no sample report is available yet.';
+  demoSampleFeedback.textContent=message;
+  demoSampleFeedback.classList.toggle('is-unavailable',!available);
+  if(demoState)demoState.textContent=available?'Illustrative preview — no live research':'Coming soon — no sample report available';
 }
-demoForm?.addEventListener('submit',event=>{event.preventDefault();runDemo()});
-document.querySelectorAll('[data-question]').forEach(button=>button.addEventListener('click',()=>{if(demoQuestion){demoQuestion.value=button.dataset.question;demoQuestion.focus()}}));
-
-
+demoResearchType?.addEventListener('change',updateDemoSampleAvailability);
+demoViewSample?.addEventListener('click',()=>{
+  const route=demoSampleDestinations[demoResearchType?.value];
+  if(route){window.location.assign(route);return;}
+  updateDemoSampleAvailability();
+});
+demoForm?.addEventListener('submit',event=>event.preventDefault());
+document.querySelectorAll('[data-question]').forEach(button=>button.addEventListener('click',()=>{
+  if(demoQuestion){demoQuestion.value=button.dataset.question;demoQuestion.focus()}
+}));
 
 // Keep the native disclosure state reflected for assistive technologies.
 document.querySelectorAll('details[data-faq]').forEach(item=>{
@@ -159,29 +161,3 @@ function prepareReportToc(root=document){
   });
 }
 prepareReportToc();
-
-
-// Sample selector: routes exist only for research types with published reports.
-const sampleDestinations={
-  'Company Research':'/samples',
-  'Market Research':null,
-  'Competitive Intelligence':null,
-  'Academic Research':null,
-  'Custom Research':null
-};
-const sampleType=document.getElementById('sample-type');
-const sampleAvailability=document.querySelector('[data-sample-availability]');
-const viewSampleButton=document.querySelector('[data-view-sample]');
-function updateSampleAvailability(){
-  if(!sampleType||!sampleAvailability)return;
-  const available=Boolean(sampleDestinations[sampleType.value]);
-  sampleAvailability.textContent=available?'Company Research sample available.':'Coming soon — no sample report is available yet.';
-  sampleAvailability.classList.toggle('is-unavailable',!available);
-}
-sampleType?.addEventListener('change',updateSampleAvailability);
-viewSampleButton?.addEventListener('click',()=>{
-  const route=sampleDestinations[sampleType?.value];
-  if(route){window.location.assign(route);return;}
-  updateSampleAvailability();
-  sampleAvailability?.focus?.();
-});
