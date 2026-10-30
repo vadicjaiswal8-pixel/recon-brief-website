@@ -6,11 +6,7 @@
   "rewrites": [
     {
       "source": "/blog/company-research-guide",
-      "destination": "/blog/company-research-guide/index.html"
-    },
-    {
-      "source": "/blog/company-research-guide/",
-      "destination": "/blog/company-research-guide/index.html"
+      "destination": "/blog/company-research-guide/article"
     }
   ],
   "redirects": [
