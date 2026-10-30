@@ -1,7 +1,7 @@
 Recon Brief website source package
 Updated: 2026-10-21
 
-This is a source package. Do not commit generated dist/ or node_modules/; Vercel runs npm run build from the project root. The command builds eligible root HTML pages, then runs the sitemap-only mode of the root-level build.mjs.
+This is a source package. Do not commit generated dist/ or node_modules/; Vercel runs npm run build from the project root. The command runs the dependency-free root-level build.mjs, which copies eligible HTML pages while preserving nested paths, copies required assets, validates the blog outputs and generates the sitemap/robots files.
 
 Root project files:
 .gitignore
@@ -36,7 +36,7 @@ public/recon-brief.svg
 public/robots.txt
 public/sitemap.xml
 
-build.mjs has two modes: its default dependency-free static copy build and --sitemap-only, used after Vite. The sitemap mode is colocated with package.json at the project root, scans the built HTML, and synchronizes sitemap.xml and robots.txt at the root, under public/, and in dist/. This avoids relying on a nested generator file being present in the deployment.
+build.mjs is the production build command. It copies eligible source HTML files while preserving their relative paths, copies shared assets and public files, verifies the blog listing, article and images, then scans the built HTML and synchronizes sitemap.xml and robots.txt at the root, under public/, and in dist/. Vite is retained for local development only.
 
 The sitemap URL remains https://www.reconbrief.in/sitemap.xml. www is the preferred host because production redirects non-www requests to www.
 
@@ -51,7 +51,7 @@ src/assets/vite.svg
 src/index.css
 src/main.jsx
 
-Root HTML page entries are discovered automatically by Vite. index.html.html and common private, test, preview, draft, redirect, and error-page filenames are excluded. The sitemap further requires a self-canonical HTTPS URL on www.reconbrief.in, excludes noindex pages and private/test routes, excludes Vercel-configured redirect sources, and requires the canonical path to match the built HTML route.
+Eligible HTML page files are discovered automatically by build.mjs and copied with their relative paths preserved. index.html.html and common private, test, preview, draft, redirect, and error-page filenames are excluded. The sitemap further requires a self-canonical HTTPS URL on www.reconbrief.in, excludes noindex pages and private/test routes, excludes Vercel-configured redirect sources, and requires the canonical path to match the built HTML route.
 
 Current sitemap pages:
 https://www.reconbrief.in/

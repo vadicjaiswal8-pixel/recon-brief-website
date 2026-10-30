@@ -38,19 +38,33 @@ async function ensureBlogImagesInOutput() {
 
 async function ensureArticleOutput() {
   const articlePath = resolve(outputRoot, 'blog/company-research-guide/index.html');
+  let html;
   try {
-    await readFile(articlePath);
+    html = await readFile(articlePath, 'utf8');
   } catch {
     throw new Error('The Company Research article must be emitted to dist/blog/company-research-guide/index.html.');
+  }
+  if (!html.includes('<link rel="canonical" href="https://www.reconbrief.in/blog/company-research-guide">')) {
+    throw new Error('The built Company Research article is missing its expected canonical URL.');
+  }
+  if (!html.includes('Company Research: A Practical Guide to Understanding Businesses')) {
+    throw new Error('The built Company Research article does not contain the expected article content.');
   }
 }
 
 async function ensureBlogOutput() {
   const blogIndexPath = resolve(outputRoot, 'blog/index.html');
+  let html;
   try {
-    await readFile(blogIndexPath);
+    html = await readFile(blogIndexPath, 'utf8');
   } catch {
     throw new Error('The Blog listing must be emitted to dist/blog/index.html.');
+  }
+  if (!html.includes('<link rel="canonical" href="https://www.reconbrief.in/blog">')) {
+    throw new Error('The built Blog listing is missing its expected canonical URL.');
+  }
+  if (!html.includes('href="/blog/company-research-guide"')) {
+    throw new Error('The built Blog listing is missing its Company Research article link.');
   }
 }
 
@@ -277,6 +291,7 @@ async function buildLegacyStaticSite() {
       await cp(resolve(projectRoot, name), destination);
     }),
     cp(resolve(projectRoot, 'styles.css'), resolve(outputRoot, 'styles.css')),
+    cp(resolve(projectRoot, 'blog.css'), resolve(outputRoot, 'blog.css')),
     cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js')),
     cp(resolve(projectRoot, 'public'), outputRoot, { recursive: true }),
   ]);
@@ -287,11 +302,4 @@ async function buildLegacyStaticSite() {
   console.log('Recon Brief static build written to dist/');
 }
 
-if (process.argv.includes('--sitemap-only')) {
-  await ensureBlogOutput();
-  await ensureArticleOutput();
-  await ensureBlogImagesInOutput();
-  await generateSitemap();
-} else {
-  await buildLegacyStaticSite();
-}
+await buildLegacyStaticSite();

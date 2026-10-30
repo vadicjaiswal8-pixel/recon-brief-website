@@ -7,7 +7,7 @@ The update preserves the original hero composition, typography, spacing, animati
 ## Requirements
 
 - Node.js 24.x is recommended for the Vercel setup; Node.js 18 or newer also supports the legacy static build script.
-- npm for the Vite 8 production build.
+- npm (Vite is retained for local development; the production build is dependency-free).
 - Python 3.9+ or Vite Preview for local preview.
 
 ## Run locally on Windows
@@ -42,7 +42,7 @@ npm install
 npm run build
 ```
 
-The production-ready Vite output is written to `dist/` and includes the built HTML pages, hashed CSS and JavaScript bundles, and files from `public/`. `vite.config.js` discovers eligible root-level HTML pages automatically (excluding the retained `index.html.html` file and common private/test/preview filenames). The production command then runs the sitemap-only mode in root-level `build.mjs`, regenerating `sitemap.xml` and `robots.txt` at the project root, under `public/`, and in `dist/`. The sitemap is built from self-canonical, indexable page URLs. Vercel's `cleanUrls` setting serves `.html` pages without their extensions. Running `node build.mjs` without arguments remains available as a dependency-free legacy static copy build.
+The production build runs `node build.mjs` and writes the static site to `dist/`. It copies eligible source HTML files while preserving their paths, including the nested blog listing and article pages, copies shared CSS/JavaScript and the contents of `public/`, verifies the blog output files and images, and regenerates `sitemap.xml` and `robots.txt` at the project root, under `public/`, and in `dist/`. The sitemap is built from self-canonical, indexable page URLs. `vercel.json` rewrites the clean blog URLs to their nested `index.html` files. Vite remains available for local development but is not used for production output.
 
 ## Main files
 
@@ -55,11 +55,11 @@ The production-ready Vite output is written to `dist/` and includes the built HT
 - `favicon.svg`, `public/favicon.svg`, `public/favicon.png`, and `public/recon-brief.svg` — existing mint-tile, geometric navy Recon Brief mark with its light-blue accent; pages use the 64×64 PNG favicon.
 - `package.json`, `package-lock.json`, `vite.config.js`, and `vercel.json` — Vite 8/Vercel deployment configuration.
 - `VERCEL_DEPLOYMENT.md` — exact GitHub/Vercel placement, settings, and asset instructions.
-- `build.mjs` — dependency-free legacy static build and the root-level post-Vite sitemap generator (`--sitemap-only`).
+- `build.mjs` — dependency-free production static build; preserves nested HTML routes, verifies blog outputs and assets, and generates the sitemap/robots files.
 - `manus-routes.json`, `sitemap.xml`, `robots.txt`, `public/sitemap.xml`, and `public/robots.txt` — route discovery and crawler metadata. The generated sitemap is served at the existing `/sitemap.xml` URL from `dist/`.
 - `app.config.ts` — project logo metadata.
 
-The configured Vercel build is the existing root-level static HTML/CSS/JavaScript site; eligible root-level `.html` pages are automatically built and considered for the sitemap. For a future public SEO page, add its HTML file with a self-canonical `https://www.reconbrief.in/<route>` URL and do not mark it `noindex`; no sitemap URL entry needs to be maintained by hand. The separate Recon Brief application is not included in this package. The optional homepage evidence-network background reference was removed after confirming that the asset was unavailable; no replacement image was invented or added.
+The configured Vercel build is the static HTML/CSS/JavaScript site; eligible `.html` pages are copied with their relative paths preserved and considered for the sitemap. For a future public SEO page, add its HTML file with a self-canonical `https://www.reconbrief.in/<route>` URL and do not mark it `noindex`; no sitemap URL entry needs to be maintained by hand. The separate Recon Brief application is not included in this package. The optional homepage evidence-network background reference was removed after confirming that the asset was unavailable; no replacement image was invented or added.
 
 ## Content and trust notes
 
