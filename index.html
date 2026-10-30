@@ -86,13 +86,37 @@
           <div class="hero-actions"><a class="button hero-primary-cta" href="https://app.reconbrief.in/" target="_blank" rel="noopener">Start a research brief <span>↗</span></a><a class="button" href="/samples">Explore sample reports <span>→</span></a></div>
           <div class="hero-proof"><span><i></i> Source-aware workflow</span><span><i></i> Traceable research</span><span class="proof-label">Built for serious research</span></div>
         </div>
-        <div class="hero-instrument reveal reveal-delay-2" aria-label="Animated research output preview">
-          <div class="instrument-orbit orbit-one"></div><div class="instrument-orbit orbit-two"></div>
-          <div class="instrument-label top-label">RESEARCH INSTRUMENT <span>01 / 05</span></div>
-          <div class="report-frame"><div class="report-topline"><span>RECON / FIELD NOTE</span><span>2026.10.06</span></div><div class="report-page"><span class="report-kicker">Market intelligence</span><h2>Signals become<br><i>strategic context.</i></h2><div class="mini-chart"><span style="height:34%"></span><span style="height:58%"></span><span style="height:46%"></span><span style="height:75%"></span><span style="height:92%"></span><span style="height:83%"></span></div><div class="report-foot"><span>Illustrative report</span><span class="report-status">● Sample output</span></div></div><div class="scan-line"></div></div>
-          <div class="instrument-caption"><span>EV Market Outlook</span><strong>Evidence-linked report</strong></div>
-          <div class="floating-tag tag-sources"><b>Source</b><span>linked</span></div><div class="floating-tag tag-confidence"><b>Clear</b><span>provenance</span></div>
-        </div>
+        <section class="hero-instrument sample-selector reveal reveal-delay-2" aria-label="Explore a sample report">
+          <div class="sample-selector-head">
+            <span>RESEARCH PREVIEW</span>
+            <span>ILLUSTRATIVE / 01</span>
+          </div>
+          <label class="sample-field-label" for="sample-question">Research question</label>
+          <textarea id="sample-question" class="sample-question" rows="2" maxlength="240" placeholder="Enter a research question">How is the electric vehicle market changing in India?</textarea>
+          <div class="sample-selector-fields">
+            <div class="sample-field">
+              <label class="sample-field-label" for="sample-type">Research type</label>
+              <select id="sample-type" class="sample-select">
+                <option value="Company Research">Company Research</option>
+                <option value="Market Research">Market Research</option>
+                <option value="Competitive Intelligence">Competitive Intelligence</option>
+                <option value="Academic Research">Academic Research</option>
+                <option value="Custom Research">Custom Research</option>
+              </select>
+            </div>
+            <div class="sample-field">
+              <label class="sample-field-label" for="sample-depth">Report depth</label>
+              <select id="sample-depth" class="sample-select">
+                <option>Quick Answer</option>
+                <option selected>Standard Report</option>
+                <option>Deep Analysis</option>
+              </select>
+            </div>
+          </div>
+          <button class="sample-view-button" type="button" data-view-sample>View Sample Report <span aria-hidden="true">→</span></button>
+          <p class="sample-availability" data-sample-availability role="status" aria-live="polite">Company Research sample available.</p>
+          <p class="sample-selector-note">Explore a sample report. This preview does not run live research. The selected depth is illustrative; it does not change or guarantee the linked sample’s depth.</p>
+        </section>
       </div>
       <div class="hero-rail"><span>Recon Brief / 001</span><span>Research that shows its work</span><span>Scroll to explore <b>↓</b></span></div>
     </section>

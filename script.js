@@ -159,3 +159,29 @@ function prepareReportToc(root=document){
   });
 }
 prepareReportToc();
+
+
+// Sample selector: routes exist only for research types with published reports.
+const sampleDestinations={
+  'Company Research':'/samples',
+  'Market Research':null,
+  'Competitive Intelligence':null,
+  'Academic Research':null,
+  'Custom Research':null
+};
+const sampleType=document.getElementById('sample-type');
+const sampleAvailability=document.querySelector('[data-sample-availability]');
+const viewSampleButton=document.querySelector('[data-view-sample]');
+function updateSampleAvailability(){
+  if(!sampleType||!sampleAvailability)return;
+  const available=Boolean(sampleDestinations[sampleType.value]);
+  sampleAvailability.textContent=available?'Company Research sample available.':'Coming soon — no sample report is available yet.';
+  sampleAvailability.classList.toggle('is-unavailable',!available);
+}
+sampleType?.addEventListener('change',updateSampleAvailability);
+viewSampleButton?.addEventListener('click',()=>{
+  const route=sampleDestinations[sampleType?.value];
+  if(route){window.location.assign(route);return;}
+  updateSampleAvailability();
+  sampleAvailability?.focus?.();
+});
