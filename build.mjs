@@ -13,6 +13,49 @@ const excludedNamePattern = /(?:^|[._-])(?:test|spec|preview|draft|redirect|404|
 const vercelConfig = JSON.parse(await readFile(resolve(projectRoot, 'vercel.json'), 'utf8'));
 const redirectRules = Array.isArray(vercelConfig.redirects) ? vercelConfig.redirects : [];
 
+const blogImageFiles = ['company-research-guide.webp', 'company-research-guide-640.webp'];
+
+async function ensureBlogImagesInOutput() {
+  const sourceDirectory = resolve(projectRoot, 'public/blog');
+  const outputDirectory = resolve(outputRoot, 'blog');
+  await mkdir(outputDirectory, { recursive: true });
+
+  for (const filename of blogImageFiles) {
+    const sourcePath = resolve(sourceDirectory, filename);
+    const outputPath = resolve(outputDirectory, filename);
+    await cp(sourcePath, outputPath);
+    const [sourceBytes, outputBytes] = await Promise.all([
+      readFile(sourcePath),
+      readFile(outputPath),
+    ]);
+    if (!sourceBytes.equals(outputBytes)) {
+      throw new Error(`Blog image output does not match its source: ${filename}`);
+    }
+  }
+
+  console.log(`Verified ${blogImageFiles.length} Blog images in dist/blog/`);
+}
+
+async function ensureArticleOutput() {
+  const sourcePath = resolve(outputRoot, 'blog/company-research-guide.html');
+  const articlePath = resolve(outputRoot, 'blog/company-research-guide/article.html');
+
+  try {
+    await readFile(sourcePath);
+    await mkdir(dirname(articlePath), { recursive: true });
+    await cp(sourcePath, articlePath);
+    await rm(sourcePath);
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+
+  try {
+    await readFile(articlePath);
+  } catch {
+    throw new Error('The Company Research article must be emitted to dist/blog/company-research-guide/article.html.');
+  }
+}
+
 function parseAttributes(tag) {
   const attributes = {};
   const pattern = /([^\s=/>]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g;
@@ -48,11 +91,19 @@ function routeForBuiltHtml(relativePath) {
   if (webPath === 'samples-company-research-the-whole-truth-foods.html') {
     return '/samples/company-research/the-whole-truth-foods';
   }
+  if (webPath === 'blog/company-research-guide/article.html') return '/blog/company-research-guide';
   if (webPath.endsWith('/index.html')) return `/${webPath.slice(0, -'/index.html'.length)}`;
   if (!webPath.toLowerCase().endsWith('.html')) return null;
   const stem = webPath.slice(0, -'.html'.length);
   const parent = dirname(stem).split(sep).join('/');
   return basename(stem) === basename(parent) ? `/${parent}` : `/${stem}`;
+}
+
+function builtHtmlPath(relativePath) {
+  if (relativePath === 'blog/company-research-guide.html') {
+    return 'blog/company-research-guide/article.html';
+  }
+  return relativePath;
 }
 
 function routeIsExcluded(pathname, relativePath) {
@@ -227,7 +278,7 @@ async function buildLegacyStaticSite() {
   await mkdir(outputRoot, { recursive: true });
   await Promise.all([
     ...htmlPages.map(async (name) => {
-      const destination = resolve(outputRoot, name);
+      const destination = resolve(outputRoot, builtHtmlPath(name));
       await mkdir(dirname(destination), { recursive: true });
       await cp(resolve(projectRoot, name), destination);
     }),
@@ -235,11 +286,15 @@ async function buildLegacyStaticSite() {
     cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js')),
     cp(resolve(projectRoot, 'public'), outputRoot, { recursive: true }),
   ]);
+  await ensureArticleOutput();
+  await ensureBlogImagesInOutput();
   await generateSitemap();
   console.log('Recon Brief static build written to dist/');
 }
 
 if (process.argv.includes('--sitemap-only')) {
+  await ensureArticleOutput();
+  await ensureBlogImagesInOutput();
   await generateSitemap();
 } else {
   await buildLegacyStaticSite();

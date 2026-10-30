@@ -1,7 +1,14 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/blog/company-research-guide",
+      "destination": "/blog/company-research-guide/article"
+    }
+  ],
   "redirects": [
     {
       "source": "/samples/company-research/the-whole-truth-foods",
