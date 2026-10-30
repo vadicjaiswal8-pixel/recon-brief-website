@@ -37,22 +37,20 @@ async function ensureBlogImagesInOutput() {
 }
 
 async function ensureArticleOutput() {
-  const sourcePath = resolve(outputRoot, 'blog/company-research-guide.html');
-  const articlePath = resolve(outputRoot, 'blog/company-research-guide/article.html');
-
-  try {
-    await readFile(sourcePath);
-    await mkdir(dirname(articlePath), { recursive: true });
-    await cp(sourcePath, articlePath);
-    await rm(sourcePath);
-  } catch (error) {
-    if (error.code !== 'ENOENT') throw error;
-  }
-
+  const articlePath = resolve(outputRoot, 'blog/company-research-guide/index.html');
   try {
     await readFile(articlePath);
   } catch {
-    throw new Error('The Company Research article must be emitted to dist/blog/company-research-guide/article.html.');
+    throw new Error('The Company Research article must be emitted to dist/blog/company-research-guide/index.html.');
+  }
+}
+
+async function ensureBlogIndexOutput() {
+  const blogIndexPath = resolve(outputRoot, 'blog/index.html');
+  try {
+    await readFile(blogIndexPath);
+  } catch {
+    throw new Error('The Blog listing must be emitted to dist/blog/index.html.');
   }
 }
 
@@ -91,7 +89,6 @@ function routeForBuiltHtml(relativePath) {
   if (webPath === 'samples-company-research-the-whole-truth-foods.html') {
     return '/samples/company-research/the-whole-truth-foods';
   }
-  if (webPath === 'blog/company-research-guide/article.html') return '/blog/company-research-guide';
   if (webPath.endsWith('/index.html')) return `/${webPath.slice(0, -'/index.html'.length)}`;
   if (!webPath.toLowerCase().endsWith('.html')) return null;
   const stem = webPath.slice(0, -'.html'.length);
@@ -100,9 +97,6 @@ function routeForBuiltHtml(relativePath) {
 }
 
 function builtHtmlPath(relativePath) {
-  if (relativePath === 'blog/company-research-guide.html') {
-    return 'blog/company-research-guide/article.html';
-  }
   return relativePath;
 }
 
@@ -286,6 +280,7 @@ async function buildLegacyStaticSite() {
     cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js')),
     cp(resolve(projectRoot, 'public'), outputRoot, { recursive: true }),
   ]);
+  await ensureBlogIndexOutput();
   await ensureArticleOutput();
   await ensureBlogImagesInOutput();
   await generateSitemap();
@@ -293,6 +288,7 @@ async function buildLegacyStaticSite() {
 }
 
 if (process.argv.includes('--sitemap-only')) {
+  await ensureBlogIndexOutput();
   await ensureArticleOutput();
   await ensureBlogImagesInOutput();
   await generateSitemap();
