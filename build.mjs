@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,15 +14,27 @@ const excludedNamePattern = /(?:^|[._-])(?:test|spec|preview|draft|redirect|404|
 const vercelConfig = JSON.parse(await readFile(resolve(projectRoot, 'vercel.json'), 'utf8'));
 const redirectRules = Array.isArray(vercelConfig.redirects) ? vercelConfig.redirects : [];
 
-const blogImageFiles = ['company-research-guide.webp', 'company-research-guide-640.webp'];
+const blogImageSources = [
+  {
+    filename: 'company-research-guide.webp',
+    candidates: ['company-research-guide.webp', 'public/blog/company-research-guide.webp'],
+  },
+  {
+    filename: 'company-research-guide-640.webp',
+    candidates: ['company-research-guide-640.webp', 'public/blog/company-research-guide-640.webp'],
+  },
+];
 
 async function ensureBlogImagesInOutput() {
-  const sourceDirectory = resolve(projectRoot, 'public/blog');
   const outputDirectory = resolve(outputRoot, 'blog');
   await mkdir(outputDirectory, { recursive: true });
 
-  for (const filename of blogImageFiles) {
-    const sourcePath = resolve(sourceDirectory, filename);
+  for (const { filename, candidates } of blogImageSources) {
+    const sourceRelativePath = candidates.find((candidate) => existsSync(resolve(projectRoot, candidate)));
+    if (!sourceRelativePath) {
+      throw new Error(`Required Blog image is missing from the deployment. Expected one of: ${candidates.join(', ')}`);
+    }
+    const sourcePath = resolve(projectRoot, sourceRelativePath);
     const outputPath = resolve(outputDirectory, filename);
     await cp(sourcePath, outputPath);
     const [sourceBytes, outputBytes] = await Promise.all([
@@ -33,7 +46,7 @@ async function ensureBlogImagesInOutput() {
     }
   }
 
-  console.log(`Verified ${blogImageFiles.length} Blog images in dist/blog/`);
+  console.log(`Verified ${blogImageSources.length} Blog images in dist/blog/`);
 }
 
 async function ensureArticleOutput() {
