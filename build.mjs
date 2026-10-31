@@ -271,7 +271,23 @@ async function generateSitemap() {
   for (const url of urls) console.log(`  ${url}`);
 }
 
+async function copyHtmlPage(relativeSourcePath) {
+  const sourcePath = resolve(projectRoot, relativeSourcePath);
+  const destinationPath = resolve(outputRoot, builtHtmlPath(relativeSourcePath));
+  const sourceBytes = await readFile(sourcePath);
+  await mkdir(dirname(destinationPath), { recursive: true });
+  await writeFile(destinationPath, sourceBytes);
+  const outputBytes = await readFile(destinationPath);
+  if (!sourceBytes.equals(outputBytes)) {
+    throw new Error(`HTML output does not match its source: ${relativeSourcePath}`);
+  }
+}
+
 async function buildLegacyStaticSite() {
+  const requiredBlogPages = [
+    'blog/index.html',
+    'blog/company-research-guide/index.html',
+  ];
   const htmlFiles = await listSourceHtmlFiles(projectRoot);
   const htmlPages = htmlFiles
     .map((file) => relative(projectRoot, file).split(sep).join('/'))
@@ -282,19 +298,48 @@ async function buildLegacyStaticSite() {
     throw new Error('Static build requires the root index.html homepage.');
   }
 
+  // Fail early with a source-file error rather than a misleading output-file error.
+  for (const requiredPage of requiredBlogPages) {
+    if (!htmlPages.includes(requiredPage)) {
+      throw new Error(`Required blog source is missing from the deployment: ${requiredPage}`);
+    }
+    const sourceHtml = await readFile(resolve(projectRoot, requiredPage), 'utf8');
+    if (!sourceHtml.trim()) {
+      throw new Error(`Required blog source is empty: ${requiredPage}`);
+    }
+  }
+
   await rm(outputRoot, { recursive: true, force: true });
   await mkdir(outputRoot, { recursive: true });
-  await Promise.all([
-    ...htmlPages.map(async (name) => {
-      const destination = resolve(outputRoot, builtHtmlPath(name));
-      await mkdir(dirname(destination), { recursive: true });
-      await cp(resolve(projectRoot, name), destination);
-    }),
-    cp(resolve(projectRoot, 'styles.css'), resolve(outputRoot, 'styles.css')),
-    cp(resolve(projectRoot, 'blog.css'), resolve(outputRoot, 'blog.css')),
-    cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js')),
-    cp(resolve(projectRoot, 'public'), outputRoot, { recursive: true }),
-  ]);
+
+  // Copy HTML pages first. In particular, create the nested blog routes before
+  // copying public assets. The previous Promise.all copied public/blog/ into
+  // dist/blog/ at the same time as blog HTML files, allowing the two directory
+  // operations to race and intermittently remove or miss dist/blog/index.html.
+  const blogPageSet = new Set(requiredBlogPages);
+  for (const name of htmlPages) {
+    if (blogPageSet.has(name)) continue;
+    await copyHtmlPage(name);
+  }
+  for (const name of requiredBlogPages) {
+    await copyHtmlPage(name);
+  }
+
+  // Copy top-level site assets after HTML output is complete. Blog images are
+  // copied and byte-verified separately by ensureBlogImagesInOutput().
+  await cp(resolve(projectRoot, 'styles.css'), resolve(outputRoot, 'styles.css'));
+  await cp(resolve(projectRoot, 'blog.css'), resolve(outputRoot, 'blog.css'));
+  await cp(resolve(projectRoot, 'script.js'), resolve(outputRoot, 'script.js'));
+  await cp(resolve(projectRoot, 'public'), outputRoot, {
+    recursive: true,
+    filter: (sourcePath) => {
+      const publicBlogDirectory = resolve(projectRoot, 'public/blog');
+      const normalizedSource = resolve(sourcePath);
+      return normalizedSource !== publicBlogDirectory
+        && !normalizedSource.startsWith(`${publicBlogDirectory}${sep}`);
+    },
+  });
+
   await ensureBlogOutput();
   await ensureArticleOutput();
   await ensureBlogImagesInOutput();
