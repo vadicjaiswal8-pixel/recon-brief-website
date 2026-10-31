@@ -291,7 +291,11 @@ async function buildLegacyStaticSite() {
     },
     {
       destination: 'blog/company-research-guide/index.html',
-      candidates: ['blog/company-research-guide/index.html', 'blog/company-research-guide.html'],
+      candidates: [
+        'company-research-guide.html',
+        'blog/company-research-guide/index.html',
+        'blog/company-research-guide.html',
+      ],
     },
   ];
   const htmlFiles = await listSourceHtmlFiles(projectRoot);

@@ -26,7 +26,7 @@ Run the production build:
 npm run build
 ```
 
-The production build runs the dependency-free `node build.mjs` static-copy pipeline. It preserves nested HTML paths (including `blog/index.html` and `blog/company-research-guide/index.html`), copies shared styles/scripts and public assets, verifies both blog outputs and blog images, then regenerates the root/public/dist sitemap and robots files. Vite remains available for local development, but it is not used to produce the production HTML output.
+The production build runs the dependency-free `node build.mjs` static-copy pipeline. The authoritative Company Research article source is the repository-root `company-research-guide.html`; the build maps it to `dist/blog/company-research-guide/index.html`. The Blog listing source is `blog/index.html`. The pipeline copies shared styles/scripts and public assets, verifies both blog outputs and blog images, then regenerates the root/public/dist sitemap and robots files. Vite remains available for local development, but it is not used to produce the production HTML output.
 
 ## Vercel settings
 
