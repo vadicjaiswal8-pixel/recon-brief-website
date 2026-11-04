@@ -1,163 +1,489 @@
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const header=document.querySelector('[data-header]');
-const menuToggle=document.querySelector('.menu-toggle');
-const mobileNav=document.querySelector('.mobile-nav');
-const revealItems=document.querySelectorAll('.reveal');
-
-function setHeader(){header?.classList.toggle('scrolled',window.scrollY>18)}
-window.addEventListener('scroll',setHeader,{passive:true});setHeader();
-
-menuToggle?.addEventListener('click',()=>{
-  const open=mobileNav.classList.toggle('open');
-  menuToggle.setAttribute('aria-expanded',String(open));
+/* Mobile menu */
+const menuBtn = document.querySelector('.menu-btn');
+const nav = document.querySelector('#site-nav');
+menuBtn?.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', String(open));
 });
-mobileNav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{
-  mobileNav.classList.remove('open');menuToggle?.setAttribute('aria-expanded','false');
+nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  nav.classList.remove('open');
+  menuBtn?.setAttribute('aria-expanded', 'false');
 }));
 
-const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
-  if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target)}
-}),{threshold:.16,rootMargin:'0px 0px -40px'});
-revealItems.forEach(item=>revealObserver.observe(item));
-
-const stages=[
-  {index:'01',title:'A sharper question',callout:'Your question becomes a research brief.',progress:'20%'},
-  {index:'02',title:'A wider source field',callout:'Recon searches across the evidence base.',progress:'40%'},
-  {index:'03',title:'A traceable evidence chain',callout:'Claims stay connected to what supports them.',progress:'60%'},
-  {index:'04',title:'A defensible point of view',callout:'Signals become patterns, gaps, and implications.',progress:'80%'},
-  {index:'05',title:'A decision-ready report',callout:'The work becomes clear enough to share.',progress:'100%'}
-];
-const stageIndex=document.getElementById('stage-index');const stageTitle=document.getElementById('stage-title');const stageCallout=document.getElementById('stage-callout');const stageProgress=document.getElementById('stage-progress');
-function setStage(index){
-  const stage=stages[index];
-  document.querySelectorAll('.workflow-step').forEach((button,i)=>{const active=i===index;button.classList.toggle('active',active);button.setAttribute('aria-selected',String(active))});
-  [stageIndex,stageTitle,stageCallout].forEach(el=>{if(el){el.animate([{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{duration:320,easing:'cubic-bezier(.16,1,.3,1)'});}});
-  if(stageIndex)stageIndex.textContent=stage.index;if(stageTitle)stageTitle.textContent=stage.title;if(stageCallout)stageCallout.textContent=stage.callout;if(stageProgress)stageProgress.style.width=stage.progress;
+/* Entrance: parts of the opening screen rise once */
+const rise = document.querySelectorAll('.rise');
+if (reduced || !('IntersectionObserver' in window)) {
+  rise.forEach(el => el.classList.add('in'));
+} else {
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.1 });
+  rise.forEach((el, i) => { el.style.transitionDelay = (i * 90) + 'ms'; io.observe(el); });
 }
-document.querySelectorAll('.workflow-step').forEach(button=>button.addEventListener('click',()=>setStage(Number(button.dataset.stage))));
-let autoStage=0;setInterval(()=>{if(document.visibilityState==='visible'){autoStage=(autoStage+1)%stages.length;setStage(autoStage)}},5200);
 
-document.querySelectorAll('.output-item').forEach(item=>item.addEventListener('click',()=>{document.querySelectorAll('.output-item').forEach(other=>other.classList.remove('active'));item.classList.add('active')}));
-
-document.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener('click',event=>{const target=document.querySelector(link.getAttribute('href'));if(target){event.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'})}}));
-
-// Small pointer parallax on the hero instrument; it is disabled for touch and reduced-motion users.
-const instrument=document.querySelector('.hero-instrument');
-if(instrument&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(pointer:fine)').matches){instrument.addEventListener('pointermove',event=>{const rect=instrument.getBoundingClientRect();const x=(event.clientX-rect.left)/rect.width-.5;const y=(event.clientY-rect.top)/rect.height-.5;instrument.style.setProperty('--tilt-x',`${x*5}deg`);instrument.style.setProperty('--tilt-y',`${y*-4}deg`)});instrument.addEventListener('pointerleave',()=>{instrument.style.setProperty('--tilt-x','0deg');instrument.style.setProperty('--tilt-y','0deg')})}
-
-
-// Sample-report selector for the existing demo. No question is submitted for processing.
-const demoForm=document.getElementById('demo-form');
-const demoQuestion=document.getElementById('demo-question');
-const demoState=document.getElementById('demo-state');
-const demoResearchType=document.getElementById('demo-research-type');
-const demoSampleFeedback=document.querySelector('[data-demo-sample-feedback]');
-const demoViewSample=document.querySelector('[data-view-sample]');
-const demoSampleDestinations={
-  'Company Research':'/samples',
-  'Market Research':null,
-  'Competitive Intelligence':null,
-  'Academic Research':null,
-  'Custom Research':null
+/* Demo: a sample selector. No question is submitted or processed. */
+const demoForm = document.getElementById('demo-form');
+const demoQuestion = document.getElementById('demo-question');
+const demoType = document.getElementById('demo-research-type');
+const demoFeedback = document.querySelector('[data-demo-sample-feedback]');
+const demoView = document.querySelector('[data-view-sample]');
+const destinations = {
+  'Company Research': '/samples',
+  'AI Market Research': null,
+  'Competitor Analysis': null,
+  'Academic Research': null,
+  'Custom Research': null
 };
-function updateDemoSampleAvailability(){
-  if(!demoResearchType||!demoSampleFeedback)return;
-  const available=Boolean(demoSampleDestinations[demoResearchType.value]);
-  const message=available?'Company Research sample available.':'Coming soon — no sample report is available yet.';
-  demoSampleFeedback.textContent=message;
-  demoSampleFeedback.classList.toggle('is-unavailable',!available);
-  if(demoState)demoState.textContent=available?'Illustrative preview — no live research':'Coming soon — no sample report available';
-}
-demoResearchType?.addEventListener('change',updateDemoSampleAvailability);
-demoViewSample?.addEventListener('click',()=>{
-  const route=demoSampleDestinations[demoResearchType?.value];
-  if(route){window.location.assign(route);return;}
-  updateDemoSampleAvailability();
-});
-demoForm?.addEventListener('submit',event=>event.preventDefault());
-document.querySelectorAll('[data-question]').forEach(button=>button.addEventListener('click',()=>{
-  if(demoQuestion){demoQuestion.value=button.dataset.question;demoQuestion.focus()}
-}));
-
-// Keep the native disclosure state reflected for assistive technologies.
-document.querySelectorAll('details[data-faq]').forEach(item=>{
-  const summary=item.querySelector('summary');
-  const syncExpanded=()=>summary?.setAttribute('aria-expanded',String(item.open));
-  syncExpanded();
-  item.addEventListener('toggle',syncExpanded);
-});
-
-
-// Keep the native footer Explore disclosure state reflected for assistive technologies.
-document.querySelectorAll('details[data-footer-explore]').forEach(item=>{
-  const summary=item.querySelector('summary');
-  const syncExpanded=()=>summary?.setAttribute('aria-expanded',String(item.open));
-  syncExpanded();
-  item.addEventListener('toggle',syncExpanded);
-});
-
-// Inline Company Research sample viewer. It reuses the canonical report HTML artifact
-// so the Samples page and the shareable report never drift into separate report copies.
-const inlineReportViewer=document.querySelector('[data-inline-report-viewer]');
-const inlineReportContent=inlineReportViewer?.querySelector('[data-inline-report-content]');
-const inlineReportStatus=inlineReportViewer?.querySelector('[data-inline-report-status]');
-const inlineReportToggles=document.querySelectorAll('[data-inline-report-toggle]');
-const inlineReportClose=inlineReportViewer?.querySelector('[data-inline-report-close]');
-let inlineReportLoaded=false;
-let inlineReportLoading;
-function setInlineReportState(open){
-  if(!inlineReportViewer)return;
-  inlineReportViewer.hidden=!open;
-  inlineReportToggles.forEach(button=>button.setAttribute('aria-expanded',String(open)));
-  if(open){
-    inlineReportViewer.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+const TYPE_INFO = {
+  'Company Research': "A company's business model, products, market position, growth signals and strategic context.",
+  'AI Market Research': 'Market boundaries, demand drivers, customer segments, industry trends, opportunities and risks.',
+  'Competitor Analysis': 'How competitors position themselves, where they differ, and which market forces act on them.',
+  'Academic Research': 'Research questions, relevant literature, findings and limitations, organised into one output.',
+  'Custom Research': 'A specific question or business problem that does not fit neatly into one category.'
+};
+const DEPTH_INFO = {
+  'Quick Answer': 'A concise response for straightforward research questions.',
+  'Standard Report': 'A structured report containing core evidence and analysis.',
+  'Deep Analysis': 'A more comprehensive research output with broader evidence, comparisons, deeper analysis and limitations.'
+};
+const demoDepth = document.getElementById('demo-report-depth');
+function updateDemo() {
+  if (!demoType || !demoFeedback) return;
+  const ok = Boolean(destinations[demoType.value]);
+  demoFeedback.textContent = ok ? 'Company Research sample available.' : 'Coming soon. No sample report is available for this type yet.';
+  demoFeedback.classList.toggle('is-unavailable', !ok);
+  const side = document.getElementById('demo-side');
+  if (side) {
+    side.querySelector('[data-s-type]').textContent = demoType.value;
+    side.querySelector('[data-s-type-d]').textContent = TYPE_INFO[demoType.value] || '';
+    side.querySelector('[data-s-depth]').textContent = demoDepth.value;
+    side.querySelector('[data-s-depth-d]').textContent = DEPTH_INFO[demoDepth.value] || '';
+    const st = side.querySelector('[data-s-sample]');
+    st.textContent = ok ? 'A Company Research sample report is available to read.' : 'No sample report is available for this type yet.';
+    st.className = ok ? 'ok' : 'no';
   }
 }
-async function loadInlineReport(){
-  if(inlineReportLoaded)return;
-  if(inlineReportLoading)return inlineReportLoading;
-  inlineReportLoading=fetch('/samples-company-research-the-whole-truth-foods.html',{credentials:'same-origin'})
-    .then(response=>{if(!response.ok)throw new Error('Report request failed with '+response.status);return response.text()})
-    .then(markup=>{
-      const parsed=new DOMParser().parseFromString(markup,'text/html');
-      const sourceBody=parsed.body;
-      sourceBody.querySelectorAll('.site-noise,.site-header,.site-footer,script').forEach(node=>node.remove());
-      if(!inlineReportContent)throw new Error('Inline report container is missing');
-      inlineReportContent.replaceChildren(...Array.from(sourceBody.children));
-      inlineReportContent.querySelectorAll('.reveal').forEach(node=>node.classList.add('is-visible'));
-      prepareReportToc(inlineReportContent);
-      inlineReportLoaded=true;
-      if(inlineReportStatus)inlineReportStatus.hidden=true;
-    })
-    .catch(error=>{
-      if(inlineReportStatus){inlineReportStatus.hidden=false;inlineReportStatus.textContent='The sample report could not be loaded. Please try again.'}
-      console.error('Inline Company Research report failed to load',error);
-      throw error;
-    });
-  return inlineReportLoading;
-}
-inlineReportToggles.forEach(button=>button.addEventListener('click',async()=>{
-  const opening=inlineReportViewer?.hidden!==false;
-  if(!opening){setInlineReportState(false);button.focus();return}
-  setInlineReportState(true);
-  try{await loadInlineReport()}catch{}
+demoType?.addEventListener('change', updateDemo);
+demoDepth?.addEventListener('change', updateDemo);
+demoView?.addEventListener('click', () => {
+  const route = destinations[demoType?.value];
+  if (route) { parent === window ? window.location.assign(route) : parent.postMessage({ go: route }, '*'); return; }
+  updateDemo();
+});
+updateDemo();
+demoForm?.addEventListener('submit', e => e.preventDefault());
+document.querySelectorAll('[data-question]').forEach(b => b.addEventListener('click', () => {
+  if (demoQuestion) { demoQuestion.value = b.dataset.question; demoQuestion.focus(); }
 }));
-inlineReportClose?.addEventListener('click',()=>{
-  setInlineReportState(false);
-  inlineReportToggles[0]?.focus();
+
+/* Samples page: inline Company Research report, loaded from the canonical report page */
+const viewer = document.querySelector('[data-inline-report-viewer]');
+const viewerContent = viewer?.querySelector('[data-inline-report-content]');
+const viewerStatus = viewer?.querySelector('[data-inline-report-status]');
+const viewerToggles = document.querySelectorAll('[data-inline-report-toggle]');
+const viewerClose = viewer?.querySelector('[data-inline-report-close]');
+let viewerLoaded = false, viewerLoading;
+function setViewer(open) {
+  if (!viewer) return;
+  viewer.hidden = !open;
+  viewerToggles.forEach(b => b.setAttribute('aria-expanded', String(open)));
+  if (open) viewer.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+}
+async function loadViewer() {
+  if (viewerLoaded) return;
+  if (viewerLoading) return viewerLoading;
+  viewerLoading = fetch('/samples-company-research-the-whole-truth-foods.html', { credentials: 'same-origin' })
+    .then(r => { if (!r.ok) throw new Error('Report request failed with ' + r.status); return r.text(); })
+    .then(markup => {
+      const doc = new DOMParser().parseFromString(markup, 'text/html');
+      const report = doc.querySelector('[data-report]');
+      if (!report || !viewerContent) throw new Error('Report content missing');
+      viewerContent.replaceChildren(...Array.from(report.children));
+      viewerLoaded = true;
+      if (viewerStatus) viewerStatus.hidden = true;
+    })
+    .catch(err => {
+      if (viewerStatus) { viewerStatus.hidden = false; viewerStatus.textContent = 'The sample report could not be loaded. Please try again.'; }
+      console.error('Inline report failed to load', err);
+      throw err;
+    });
+  return viewerLoading;
+}
+viewerToggles.forEach(b => b.addEventListener('click', async () => {
+  const opening = viewer?.hidden !== false;
+  if (!opening) { setViewer(false); b.focus(); return; }
+  setViewer(true);
+  try { await loadViewer(); } catch {}
+}));
+viewerClose?.addEventListener('click', () => { setViewer(false); viewerToggles[0]?.focus(); });
+
+/* ---------- interaction layer ---------- */
+
+/* Reading progress */
+const progress = document.createElement('div');
+progress.className = 'progress';
+progress.setAttribute('aria-hidden', 'true');
+document.body.append(progress);
+let ticking = false;
+function updateProgress() {
+  const h = document.documentElement.scrollHeight - innerHeight;
+  progress.style.width = (h > 0 ? Math.min(100, scrollY / h * 100) : 0) + '%';
+  ticking = false;
+}
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(updateProgress); } }, { passive: true });
+updateProgress();
+
+/* Contents list follows the reader on inner pages */
+const tocLinks = [...document.querySelectorAll('.toc a[href^="#"], .chips a[href^="#"]')];
+if (tocLinks.length) {
+  const targets = tocLinks.map(a => document.getElementById(a.getAttribute('href').slice(1)));
+  function spy() {
+    let idx = -1;
+    targets.forEach((t, i) => { if (t && t.getBoundingClientRect().top < innerHeight * 0.3) idx = i; });
+    tocLinks.forEach((a, i) => i === idx ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
+  }
+  addEventListener('scroll', () => requestAnimationFrame(spy), { passive: true });
+  spy();
+}
+
+/* Itinerary slip: rows appear one after another */
+document.querySelectorAll('.slip').forEach(slip => {
+  const parts = slip.querySelectorAll('h3,.row,.total');
+  parts.forEach((el, i) => { el.style.transitionDelay = (i * 110) + 'ms'; });
+  if (reduced || !('IntersectionObserver' in window)) { slip.classList.add('in'); return; }
+  new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { slip.classList.add('in'); o.disconnect(); } }), { threshold: 0.25 }).observe(slip);
 });
 
-function prepareReportToc(root=document){
-  root.querySelectorAll('.report-toc').forEach(toc=>{
-    if(toc.parentElement?.matches('details.report-toc-disclosure'))return;
-    const details=document.createElement('details');
-    details.className='report-toc-disclosure';
-    details.open=matchMedia('(min-width: 741px)').matches;
-    const summary=document.createElement('summary');
-    summary.innerHTML='<span>IN THIS REPORT</span><span aria-hidden="true">⌄</span>';
-    details.append(summary);
-    toc.parentNode.insertBefore(details,toc);
-    details.append(toc);
+/* Home hero: twelve sources feed one claim. Everything here replays an existing sample. */
+const cv = document.getElementById('cv');
+if (cv) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const apexEl = document.getElementById('apex');
+  const CLAIMS = {
+    1: { src: [5],      txt: 'Revenue of \u20B9219.83 crore in FY25<sup>E5</sup>' },
+    2: { src: [5, 12],  txt: 'Net loss of \u20B928.15 crore<sup>E5, E12</sup>' },
+    3: { src: [11, 12], txt: '$51 million Series D<sup>E11, E12</sup>' }
+  };
+  const AX = 600, AY = 40, NY = 330, X0 = 90, DX = 1020 / 11;
+  const nodes = [], lines = [];
+  for (let i = 0; i < 12; i++) {
+    const n = i + 1, x = X0 + i * DX;
+    for (let k = -3; k <= 2; k++) {
+      const off = k * 3 + 1.5;
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', `M${x + off} ${NY} C ${x + off} 190, ${AX + (x - AX) * 0.12} 150, ${AX + k * 1.2} ${AY}`);
+      p.setAttribute('pathLength', '1');
+      p.setAttribute('class', 'ln');
+      p.dataset.src = n;
+      cv.append(p); lines.push(p);
+    }
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'nd'); g.dataset.src = n; g.setAttribute('tabindex', '0');
+    g.innerHTML = `<circle cx="${x}" cy="${NY}" r="5"/><text x="${x}" y="${NY + 30}">E${n}</text>`;
+    cv.append(g); nodes.push(g);
+  }
+  const claimEls = document.querySelectorAll('.claim');
+  const regs = document.querySelectorAll('.reg');
+  let current = 0, manual = false;
+  function setClaim(n) {
+    current = n;
+    const c = CLAIMS[n], on = c ? c.src : [];
+    nodes.forEach(g => g.classList.toggle('on', on.includes(+g.dataset.src)));
+    lines.forEach(l => l.classList.toggle('on', on.includes(+l.dataset.src)));
+    regs.forEach(r => r.classList.toggle('on', on.includes(+r.dataset.src)));
+    claimEls.forEach(e => e.classList.toggle('on', +e.dataset.claim === n));
+    if (apexEl && c) apexEl.innerHTML = c.txt;
+  }
+  claimEls.forEach(e => {
+    const pick = () => { manual = true; setClaim(+e.dataset.claim); };
+    e.addEventListener('mouseenter', pick); e.addEventListener('focus', pick);
+    e.addEventListener('click', pick);
+    e.addEventListener('mouseleave', () => { manual = false; });
+  });
+  nodes.forEach(g => {
+    const hit = () => {
+      const n = +g.dataset.src;
+      const found = Object.keys(CLAIMS).find(k => CLAIMS[k].src.includes(n));
+      if (found) { manual = true; setClaim(+found); }
+    };
+    g.addEventListener('mouseenter', hit); g.addEventListener('focus', hit);
+    g.addEventListener('mouseleave', () => { manual = false; });
+  });
+  setClaim(1);
+  if (!reduced) setInterval(() => {
+    if (manual || document.hidden || run?.dataset.state === 'running') return;
+    setClaim(current % 3 + 1);
+  }, 3800);
+
+  /* the replayed run strip */
+  var run = document.getElementById('run');
+  const steps = run ? [...run.querySelectorAll('li')] : [];
+  const paper = document.getElementById('paper');
+  const counters = [...document.querySelectorAll('[data-count]')];
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  let token = 0;
+  function settle() {
+    steps.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+    counters.forEach(c => { c.textContent = c.dataset.count; });
+    if (paper) paper.style.opacity = 1;
+    if (run) run.dataset.state = 'done';
+  }
+  function countUp() {
+    counters.forEach(el => {
+      const end = parseFloat(el.dataset.count), t0 = performance.now();
+      (function f(t) {
+        const k = Math.min(1, (t - t0) / 900);
+        el.textContent = (end * (1 - Math.pow(1 - k, 3))).toFixed(2);
+        if (k < 1) requestAnimationFrame(f);
+      })(t0);
+    });
+  }
+  async function play() {
+    const my = ++token;
+    run.dataset.state = 'running';
+    steps.forEach(s => s.classList.remove('active', 'done'));
+    counters.forEach(c => { c.textContent = '0.00'; });
+    if (paper) paper.style.opacity = .3;
+    for (let i = 0; i < steps.length; i++) {
+      steps[i].classList.add('active');
+      await wait(i === 1 ? 900 : 620); if (my !== token) return;
+      steps[i].classList.remove('active'); steps[i].classList.add('done');
+    }
+    run.dataset.state = 'done';
+    if (paper) paper.style.opacity = 1;
+    countUp();
+  }
+  document.getElementById('replay')?.addEventListener('click', play);
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName || '')) return;
+    if (e.key === '1' || e.key === '2' || e.key === '3') { manual = true; setClaim(+e.key); setTimeout(() => { manual = false; }, 9000); }
+    if (e.key === 'r' || e.key === 'R') play();
+  });
+  if (reduced) settle(); else setTimeout(play, 700);
+}
+
+/* How it works: the five columns light up in order */
+document.querySelectorAll('.five').forEach(five => {
+  [...five.children].forEach((c, i) => { c.style.transitionDelay = (i * 140) + 'ms'; });
+  if (reduced || !('IntersectionObserver' in window)) five.classList.add('in');
+  else new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { five.classList.add('in'); o.disconnect(); } }), { threshold: 0.25 }).observe(five);
+});
+
+/* The grid lights up under the cursor on every page: home hero, inner-page headers, closing bands */
+if (!reduced && matchMedia('(pointer:fine)').matches) {
+  document.querySelectorAll('.hero, .phead, .cta').forEach(el => {
+    const spot = document.createElement('div'); spot.className = 'spot'; spot.setAttribute('aria-hidden', 'true');
+    el.insertBefore(spot, el.firstChild);
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px'); el.style.setProperty('--spot', '1');
+    });
+    el.addEventListener('pointerleave', () => el.style.setProperty('--spot', '0'));
   });
 }
-prepareReportToc();
+
+/* ---------- polish: spotlight cells, reveal on scroll, quick navigation ---------- */
+if (matchMedia('(pointer:fine)').matches) {
+  document.addEventListener('pointermove', e => {
+    const cell = e.target.closest?.('.cell');
+    if (!cell) return;
+    const r = cell.getBoundingClientRect();
+    cell.style.setProperty('--cx', (e.clientX - r.left) + 'px');
+    cell.style.setProperty('--cy', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+}
+const rvTargets = document.querySelectorAll('.psec .phd, .psec .pbd, .sec>h2, .sec>.lead, .cells>.cell, .notes>p, .demo');
+if (rvTargets.length && 'IntersectionObserver' in window && !reduced) {
+  const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+  rvTargets.forEach(el => {
+    el.classList.add('rv');
+    if (el.matches('.cells>.cell')) el.style.transitionDelay = ([...el.parentElement.children].indexOf(el) % 4 * 90) + 'ms';
+    rio.observe(el);
+  });
+}
+
+const PAGES = [
+  ['Home', '/', ''], ['About Us', '/about', 'Company'], ['How It Works', '/how-it-works', 'Product'], ['Contact Us', '/contact', 'Company'],
+  ['Interactive demo', '/#demo', 'Product'], ['Samples', '/samples', 'Product'],
+  ['Sample report: The Whole Truth Foods', '/samples-company-research-the-whole-truth-foods', 'Sample'],
+  ['Company Research', '/company-research', 'Research'], ['AI Market Research', '/ai-market-research', 'Research'],
+  ['Competitor Analysis', '/competitor-analysis', 'Research'], ['Research Methodology', '/research-methodology', 'Research'],
+  ['Trust & Privacy', '/trust-and-privacy', 'Company'], ['Blog', '/blog', 'Reading'],
+  ['Company research guide', '/blog/company-research-guide', 'Reading'], ['Open Recon Brief', 'https://app.reconbrief.in/', 'App']
+];
+let pal, palInput, palList, palIdx = 0, palShown = [], palPrev;
+function buildPal() {
+  pal = document.createElement('div');
+  pal.className = 'pal'; pal.setAttribute('role', 'dialog'); pal.setAttribute('aria-modal', 'true'); pal.setAttribute('aria-label', 'Quick navigation');
+  pal.innerHTML = '<div class="pal-box"><input type="text" placeholder="Jump to a page..." aria-label="Search pages" autocomplete="off" spellcheck="false"><ul class="pal-list" role="listbox"></ul><div class="pal-foot"><span><kbd>\u2191</kbd> <kbd>\u2193</kbd> move</span><span><kbd>Enter</kbd> open</span><span><kbd>Esc</kbd> close</span></div></div>';
+  document.body.append(pal);
+  palInput = pal.querySelector('input'); palList = pal.querySelector('ul');
+  pal.addEventListener('mousedown', e => { if (e.target === pal) closePal(); });
+  palInput.addEventListener('input', () => renderPal(palInput.value));
+  palInput.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); palIdx = Math.min(palShown.length - 1, palIdx + 1); markPal(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); palIdx = Math.max(0, palIdx - 1); markPal(); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (palShown[palIdx]) go(palShown[palIdx][1]); }
+    else if (e.key === 'Escape') { e.preventDefault(); closePal(); }
+    else if (e.key === 'Tab') { e.preventDefault(); }
+  });
+}
+function renderPal(q) {
+  const t = q.trim().toLowerCase();
+  palShown = PAGES.filter(p => !t || (p[0] + ' ' + p[2]).toLowerCase().includes(t));
+  palIdx = 0;
+  palList.innerHTML = palShown.length ? '' : '<div class="pal-empty">No matching page.</div>';
+  palShown.forEach((p, i) => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option');
+    li.innerHTML = '<span></span><small></small>';
+    li.firstChild.textContent = p[0]; li.lastChild.textContent = p[2];
+    li.addEventListener('mousemove', () => { palIdx = i; markPal(); });
+    li.addEventListener('click', () => go(p[1]));
+    palList.append(li);
+  });
+  markPal();
+}
+function markPal() {
+  [...palList.querySelectorAll('li')].forEach((li, i) => { li.setAttribute('aria-selected', String(i === palIdx)); if (i === palIdx) li.scrollIntoView({ block: 'nearest' }); });
+}
+function go(href) { closePal(); if (href.startsWith('/#') && location.pathname === '/') { location.hash = href.slice(1); } else { location.assign(href); } }
+function openPal() { if (!pal) buildPal(); palPrev = document.activeElement; pal.classList.add('open'); palInput.value = ''; renderPal(''); palInput.focus(); }
+function closePal() { pal?.classList.remove('open'); palPrev?.focus?.(); }
+document.querySelectorAll('[data-palette]').forEach(b => b.addEventListener('click', openPal));
+addEventListener('keydown', e => {
+  const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName || '');
+  if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); pal?.classList.contains('open') ? closePal() : openPal(); }
+  else if (e.key === '/' && !typing && !e.metaKey && !e.ctrlKey) { e.preventDefault(); openPal(); }
+});
+
+/* Report: evidence chips show their source on hover or focus */
+(function () {
+  let pop;
+  const mk = () => { pop = document.createElement('div'); pop.className = 'evpop'; pop.setAttribute('role', 'tooltip'); document.body.append(pop); };
+  function show(a) {
+    const id = (a.getAttribute('href') || '').slice(1);
+    const card = id && document.getElementById(id);
+    if (!card || !card.dataset.title) return;
+    if (!pop) mk();
+    const t = card.dataset.type || '';
+    const host = card.querySelector('.host')?.textContent || '';
+    pop.innerHTML = '<b></b><span class="badge co"></span><small></small>';
+    pop.firstChild.textContent = card.querySelector('.rc-top b')?.textContent + '  ' + card.dataset.title;
+    pop.querySelector('.badge').textContent = t;
+    pop.querySelector('small').textContent = host;
+    const r = a.getBoundingClientRect();
+    pop.classList.add('on');
+    const w = pop.offsetWidth, h = pop.offsetHeight;
+    pop.style.left = Math.max(12, Math.min(innerWidth - w - 12, r.left + r.width / 2 - w / 2)) + 'px';
+    pop.style.top = (r.top - h - 10 > 8 ? r.top - h - 10 : r.bottom + 10) + 'px';
+  }
+  const hide = () => pop && pop.classList.remove('on');
+  document.addEventListener('mouseover', e => { const a = e.target.closest?.('a.ev'); if (a) show(a); });
+  document.addEventListener('mouseout', e => { if (e.target.closest?.('a.ev')) hide(); });
+  document.addEventListener('focusin', e => { const a = e.target.closest?.('a.ev'); if (a) show(a); });
+  document.addEventListener('focusout', hide);
+  addEventListener('scroll', hide, { passive: true });
+  document.addEventListener('click', e => {
+    const a = e.target.closest?.('a.ev'); if (!a) return;
+    const card = document.getElementById((a.getAttribute('href') || '').slice(1));
+    if (card) { card.classList.add('flash'); setTimeout(() => card.classList.remove('flash'), 2200); }
+  });
+})();
+
+/* ---------- theme toggle ---------- */
+(function () {
+  const root = document.documentElement;
+  const btns = document.querySelectorAll('[data-theme-toggle]');
+  const cur = () => root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  function sync() {
+    const light = cur() === 'light';
+    btns.forEach(b => { b.setAttribute('aria-pressed', String(light)); b.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme'); b.title = light ? 'Switch to dark theme' : 'Switch to light theme'; });
+  }
+  btns.forEach(b => b.addEventListener('click', () => {
+    const next = cur() === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('rb-theme', next); } catch (e) {}
+    sync();
+  }));
+  sync();
+  if (window.matchMedia) {
+    const mq = matchMedia('(prefers-color-scheme: light)');
+    const follow = e => { let saved = null; try { saved = localStorage.getItem('rb-theme'); } catch (x) {} if (!saved) { root.setAttribute('data-theme', e.matches ? 'light' : 'dark'); sync(); } };
+    mq.addEventListener ? mq.addEventListener('change', follow) : mq.addListener && mq.addListener(follow);
+  }
+})();
+
+/* ---------- contact form ---------- */
+(function () {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  const status = document.getElementById('form-status');
+  if (form.elements.ts) form.elements.ts.value = String(Date.now());
+  const btn = form.querySelector('button[type="submit"]');
+  const EMAIL = 'support@reconbrief.in';
+  const rules = {
+    name: v => v.trim().length >= 2 ? '' : 'Enter your full name.',
+    email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Enter a valid work email address.',
+    subject: v => v.trim().length >= 3 ? '' : 'Enter a subject.',
+    type: v => v ? '' : 'Choose an enquiry type.',
+    message: v => v.trim().length >= 10 ? '' : 'Write a message of at least 10 characters.',
+    consent: (v, el) => el.checked ? '' : 'Please confirm that you have read the Privacy Policy before sending your message.'
+  };
+  const fields = Object.keys(rules).map(k => form.elements[k]);
+  function check(el) {
+    const msg = rules[el.name](el.value, el);
+    const wrap = el.closest('.field');
+    wrap.classList.toggle('bad', Boolean(msg));
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    wrap.querySelector('.err').textContent = msg;
+    return !msg;
+  }
+  fields.forEach(el => {
+    el.addEventListener('blur', () => { if ((el.type !== 'checkbox' && el.value) || el.closest('.field').classList.contains('bad')) check(el); });
+    el.addEventListener('input', () => { if (el.closest('.field').classList.contains('bad')) check(el); });
+    el.addEventListener('change', () => { if (el.closest('.field').classList.contains('bad')) check(el); });
+  });
+  function show(kind, title, body, extra) {
+    status.className = 'form-status show ' + kind;
+    status.innerHTML = '';
+    const t = document.createElement('strong'); t.textContent = title;
+    const p = document.createElement('span'); p.textContent = body;
+    status.append(t, p);
+    if (extra) status.append(extra);
+    status.setAttribute('tabindex', '-1'); status.focus({ preventScroll: false });
+  }
+  function mailtoLink() {
+    const d = Object.fromEntries(new FormData(form).entries());
+    const body = 'Privacy Policy read and understood: yes\n' + 'Name: ' + d.name + '\nEmail: ' + d.email + '\nEnquiry type: ' + d.type + '\n\n' + d.message;
+    return 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(d.subject) + '&body=' + encodeURIComponent(body);
+  }
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    status.className = 'form-status';
+    const bad = fields.filter(el => !check(el));
+    if (bad.length) { bad[0].focus(); show('fail', 'Please fix the highlighted fields.', bad.length + (bad.length === 1 ? ' field needs' : ' fields need') + ' attention before this can be sent.'); return; }
+    const endpoint = (form.dataset.endpoint || '').trim();
+    if (!endpoint) {
+      const a = document.createElement('a'); a.className = 'btn'; a.href = mailtoLink(); a.textContent = 'Email us instead';
+      show('info', 'Your message has not been sent.', 'The contact form is not connected to an email service yet, so nothing was delivered. Please email ' + EMAIL + ' directly. The button below opens your email app with your message filled in.', a);
+      return;
+    }
+    btn.disabled = true; btn.classList.add('loading'); btn.setAttribute('aria-busy', 'true');
+    const label = btn.querySelector('.lbl'); const old = label.textContent; label.textContent = 'Sending';
+    try {
+      const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(Object.assign(Object.fromEntries(new FormData(form).entries()), { consent: true, consent_text: form.querySelector('label[for="c-consent"]').innerText.replace(/\s*\*\s*\(required\)\s*$/, '').trim(), consent_at: new Date().toISOString(), privacy_notice_url: location.origin + '/trust-and-privacy' })) });
+      if (!res.ok) throw new Error('Request failed with status ' + res.status);
+      form.reset(); fields.forEach(el => { el.setAttribute('aria-invalid', 'false'); el.closest('.field').classList.remove('bad'); });
+      show('good', 'Message sent.', 'Thank you. We will reply to the email address you provided.');
+    } catch (err) {
+      const a = document.createElement('a'); a.className = 'btn'; a.href = mailtoLink(); a.textContent = 'Email us instead';
+      show('fail', 'Your message could not be sent.', 'Please try again, or email ' + EMAIL + ' directly.', a);
+    } finally {
+      btn.disabled = false; btn.classList.remove('loading'); btn.removeAttribute('aria-busy'); label.textContent = old;
+    }
+  });
+})();
