@@ -4,7 +4,7 @@ The Contact Us form now posts to `/api/contact`, a Vercel serverless function th
 
 ## Files in this update
 Created:
-- `api/contact.js` the secure endpoint (Vercel detects the `api/` folder automatically; no change to `vercel.json`, `package.json` or `build.mjs`)
+- `api/contact.js` the secure endpoint (updated: key cleaning, minimal Zoho payload, detailed sanitised diagnostics) (Vercel detects the `api/` folder automatically; no change to `vercel.json`, `package.json` or `build.mjs`)
 - `.env.example` placeholder names only
 - `tests/contact-api.test.mjs` backend tests with a mocked Zoho (run `node tests/contact-api.test.mjs`; uses a fake key)
 
@@ -49,14 +49,31 @@ curl -i -X POST https://www.reconbrief.in/api/contact -H "Content-Type: applicat
 Expected: `HTTP/2 200` and `{"ok":true}`.
 
 ## If something fails
-Vercel > your project > Logs, filter for `/api/contact`. Each request logs one JSON line with an event name and a short request id (never the key, email address or message).
-- `not_configured` / HTTP 503: `ZOHO_CPAAS_API_KEY` missing, or you have not redeployed since adding it.
-- `notify_failed` with `status 401` or `403`: wrong or revoked key, or the key belongs to a different agent.
-- `notify_failed` with `status 400` and a `TM_` code: Zoho rejected the request (for example the sender is not verified for that agent). Check the code in Zoho's error list.
-- `notify_failed` with `status 404`, or `notify_error`: check `ZOHO_CPAAS_API_URL`. The public Zoho page lists the `.com` host and I could not verify the `.in` host from here, so confirm it matches the Request URL shown in your Zoho account documentation.
+Vercel > your project > Logs, filter for `/api/contact`. Each request logs one JSON line with an event name and a short request id. Logs never contain the API key, visitor email addresses or message text, and anything Zoho sends back is cleaned before it is logged (emails become `[email]`, long token-like strings become `[redacted]`).
+
+When the enquiry email fails you get a `notify_failed` line with:
+- `status`: the HTTP status Zoho returned (for example 401, 400, 500)
+- `zohoCode` and `zohoMessage`: Zoho's own error code and message, for example `TM_3301`
+- `subErrors`: up to five entries with `code`, `target` (the field Zoho objected to, such as `from`) and `message`
+- `zohoRequestId`: quote this to Zoho support
+- `contentType`, `jsonBody`, `preview`: if Zoho answered with a web page instead of JSON, a short cleaned preview
+- `endpointHost`, `endpointPath`, `endpointPathExpected`: which URL was called
+- `keyPresent` and `keyFixesApplied`: whether a key was set and whether it had to be cleaned (`had_Zoho-enczapikey_prefix`, `quotes`, `outer_whitespace`, `inner_whitespace`)
+- `senderDomain` and `ms`: the sender's domain and how long Zoho took
+
+`notify_error` means no answer arrived at all (network or timeout); its `cause` field shows codes such as `ENOTFOUND` (wrong host) or `ETIMEDOUT`.
+
+How to read it:
+- `not_configured` / HTTP 503: `ZOHO_CPAAS_API_KEY` missing, or not redeployed since adding it.
+- `status 401` or `403`: wrong or revoked key, a key from another agent, or a key from a different Zoho data centre than the host in `ZOHO_CPAAS_API_URL`.
+- `status 400` with a `TM_` code: Zoho rejected the request; `subErrors[].target` names the field (for example an unverified `from` sender for this agent).
+- `status 404` or `notify_error` with `ENOTFOUND`: the host or path is wrong. Compare `endpointHost` with the API host your agent shows under Agents > agent_1 > SMTP/API.
+- `status 500` or another 5xx with `jsonBody: false`: Zoho (or its gateway) failed before producing a normal error. Send `zohoRequestId` or the time and `requestId` to Zoho support, and confirm the agent, sender domain and account review status are all active.
 - `origin_rejected` / 403: the form is being served from an address not in the allowed list; add it to `CONTACT_ALLOWED_ORIGINS`.
-- `rate_limited` / 429: someone (possibly you while testing) sent too many; wait 10 minutes.
-- `confirm_failed`: the visitor confirmation failed but the enquiry reached support. The visitor still sees success.
+- `rate_limited` / 429: too many submissions (possibly your own testing); wait 10 minutes.
+- `confirm_failed`: the visitor confirmation failed but the enquiry reached support; the visitor still sees success.
+
+Vercel environment variables for this feature: `ZOHO_CPAAS_API_KEY` (required, key only), `ZOHO_CPAAS_API_URL` (optional, default `https://cpaas.zoho.in/v1.1/email`), `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` (optional, default `support@reconbrief.in`), `CONTACT_ALLOWED_ORIGINS` (optional), and `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` (recommended, for shared rate limiting).
 
 ## What was and was not tested
 Tested: server validation (missing fields, bad emails, wrong enquiry type, missing consent, oversize body, malformed JSON), honeypot and too-fast submissions, HTML escaping and header-injection stripping, CORS and origin checks, rate limiting (in-memory and the shared-storage path), exact Zoho request format against Zoho's documentation, success, failure and confirmation-failure paths, missing key, log contents, a real HTTP request through a streamed body, the browser form on desktop and mobile posting to the real function, and a scan showing no key or Zoho reference in the built website files. All Zoho calls were mocked.
