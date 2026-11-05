@@ -82,14 +82,42 @@ async function allow(key, limit, windowSec) {
 async function zohoSend(payload) {
   const { url, key } = CFG();
   if (!key) { const e = new Error('not_configured'); e.code = 'not_configured'; throw e; }
+
+  const startedAt = Date.now();
   const r = await fetch(url, {
     method: 'POST',
     headers: { Authorization: 'Zoho-enczapikey ' + key, 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify(payload), signal: AbortSignal.timeout(ZOHO_TIMEOUT_MS),
   });
-  let body = null; try { body = await r.json(); } catch { /* non-JSON error page */ }
-  const ok = r.ok && body && body.message !== 'error';
-  return { ok, status: r.status, requestId: body?.request_id, code: body?.data?.[0]?.code || body?.data?.error_code };
+
+  // Read the response once, then safely extract diagnostic fields. Never log the
+  // request payload, API key, visitor email, or message content.
+  const raw = await r.text();
+  let body = null;
+  try { body = raw ? JSON.parse(raw) : null; } catch { /* Zoho may return non-JSON text */ }
+
+  const firstData = Array.isArray(body?.data) ? body.data[0] : body?.data;
+  const messageValue = body?.message || body?.error || body?.error_message ||
+    firstData?.message || firstData?.error || firstData?.error_message ||
+    (typeof body?.data === 'string' ? body.data : '');
+  const codeValue = firstData?.code || firstData?.error_code || body?.code || body?.error_code || '';
+  const requestIdValue = body?.request_id || body?.requestId || body?.data?.request_id || '';
+  const message = typeof messageValue === 'string' ? messageValue.slice(0, 400) : JSON.stringify(messageValue).slice(0, 400);
+  const code = String(codeValue || '').slice(0, 100);
+  const ok = r.ok && body && String(body.message || '').toLowerCase() !== 'error' && !body.error && !firstData?.error;
+
+  return {
+    ok: Boolean(ok),
+    status: r.status,
+    requestId: String(requestIdValue || '').slice(0, 120),
+    code,
+    message,
+    contentType: r.headers.get('content-type') || '',
+    responsePreview: body ? '' : raw.slice(0, 300).replace(/[\r\n\t]+/g, ' '),
+    durationMs: Date.now() - startedAt,
+    endpointHost: new URL(url).host,
+    endpointPath: new URL(url).pathname,
+  };
 }
 
 const person = (address, name) => ({ email_address: { address, name: headerName(name) } });
@@ -187,7 +215,7 @@ export default async function handler(req, res) {
   // 1. internal enquiry notification: this decides success or failure for the visitor
   try {
     const r = await zohoSend(notificationMail(cfg, f, requestId));
-    if (!r.ok) { log('notify_failed', { requestId, status: r.status, code: r.code }); return send(res, 502, { ok: false, error: 'send_failed' }); }
+    if (!r.ok) { log('notify_failed', { requestId, status: r.status, zohoCode: r.code, zohoMessage: r.message, zohoRequestId: r.requestId, contentType: r.contentType, responsePreview: r.responsePreview, durationMs: r.durationMs, endpointHost: r.endpointHost, endpointPath: r.endpointPath }); return send(res, 502, { ok: false, error: 'send_failed', requestId }); }
     log('notify_sent', { requestId, zohoRequestId: r.requestId });
   } catch (e) {
     log(e.code === 'not_configured' ? 'not_configured' : 'notify_error', { requestId, msg: e.code === 'not_configured' ? 'ZOHO_CPAAS_API_KEY missing' : String(e.name || 'error') });
@@ -196,9 +224,8 @@ export default async function handler(req, res) {
   // 2. visitor confirmation: independent; a failure here never turns the enquiry into a failure
   try {
     const r = await zohoSend(confirmationMail(cfg, f, requestId));
-    log(r.ok ? 'confirm_sent' : 'confirm_failed', { requestId, status: r.status, code: r.code });
+    log(r.ok ? 'confirm_sent' : 'confirm_failed', { requestId, status: r.status, zohoCode: r.code, zohoMessage: r.message, zohoRequestId: r.requestId, durationMs: r.durationMs });
   } catch (e) { log('confirm_error', { requestId, msg: String(e.name || 'error') }); }
 
   return send(res, 200, { ok: true });
 }
-
